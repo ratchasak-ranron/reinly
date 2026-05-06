@@ -1,7 +1,15 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Bell, Languages, LogOut, Search } from 'lucide-react';
-import { getUsers } from '@reinly/mock-server';
+import {
+  Bell,
+  Building2,
+  Building,
+  Languages,
+  LogOut,
+  Search,
+} from 'lucide-react';
+import { getBranches, getTenants, getUsers } from '@reinly/mock-server';
+import type { Id } from '@reinly/domain';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -144,8 +152,27 @@ function UserChip({
   t: ReturnType<typeof useTranslation>['t'];
 }) {
   const [open, setOpen] = useState(false);
+  const tenantId = useDevToolbar((s) => s.tenantId);
+  const branchId = useDevToolbar((s) => s.branchId);
+  const setTenant = useDevToolbar((s) => s.setTenant);
+  const setBranch = useDevToolbar((s) => s.setBranch);
   const signOut = useDevToolbar((s) => s.signOut);
   const roleLabel = role ? t(`role.${role}`, { defaultValue: role }) : null;
+
+  const tenants = useMemo(() => getTenants(), []);
+  const allBranches = useMemo(() => getBranches(), []);
+  const branchesForTenant = useMemo(
+    () => allBranches.filter((b) => b.tenantId === tenantId),
+    [allBranches, tenantId],
+  );
+  const currentTenant = tenants.find((c) => c.id === tenantId) ?? null;
+  const currentBranch = allBranches.find((b) => b.id === branchId) ?? null;
+
+  function handleTenantChange(nextTenantId: Id) {
+    setTenant(nextTenantId);
+    const firstBranch = allBranches.find((b) => b.tenantId === nextTenantId);
+    if (firstBranch) setBranch(firstBranch.id);
+  }
 
   return (
     <div className="relative">
@@ -172,7 +199,11 @@ function UserChip({
         </span>
         <span className="hidden flex-col text-left leading-tight md:flex">
           <span className="truncate text-xs font-medium text-foreground">{name}</span>
-          {roleLabel ? (
+          {currentTenant && currentBranch ? (
+            <span className="truncate text-[10px] text-muted-foreground">
+              {currentTenant.name} · {currentBranch.name}
+            </span>
+          ) : roleLabel ? (
             <span className="truncate text-[10px] uppercase tracking-wide text-muted-foreground">
               {roleLabel}
             </span>
@@ -183,20 +214,77 @@ function UserChip({
         <div
           role="menu"
           aria-label={name}
-          className="absolute right-0 top-[calc(100%+0.25rem)] z-40 w-44 overflow-hidden rounded-xl border border-border bg-popover shadow-popover"
+          className="absolute right-0 top-[calc(100%+0.25rem)] z-40 w-72 overflow-hidden rounded-xl border border-border bg-popover shadow-popover"
         >
-          <button
-            type="button"
-            role="menuitem"
-            onClick={() => {
-              setOpen(false);
-              signOut();
-            }}
-            className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm text-foreground transition-colors hover:bg-muted"
-          >
-            <LogOut className="size-4 text-muted-foreground" aria-hidden="true" />
-            {t('login.signOut')}
-          </button>
+          <div className="border-b border-border px-3 py-3">
+            <p className="text-sm font-semibold text-foreground">{name}</p>
+            {roleLabel ? (
+              <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                {roleLabel}
+              </p>
+            ) : null}
+          </div>
+
+          <div className="space-y-2 px-3 py-3">
+            <label className="block">
+              <span className="mb-1 flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                <Building className="size-3" aria-hidden="true" />
+                {t('topbar.tenant')}
+              </span>
+              <select
+                value={tenantId ?? ''}
+                onChange={(e) => handleTenantChange(e.target.value as Id)}
+                className="h-9 w-full cursor-pointer rounded-md border border-input bg-card px-2 text-sm shadow-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                aria-label={t('topbar.tenant')}
+              >
+                {tenants.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="block">
+              <span className="mb-1 flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                <Building2 className="size-3" aria-hidden="true" />
+                {t('topbar.branch')}
+              </span>
+              <select
+                value={branchId ?? ''}
+                onChange={(e) => setBranch(e.target.value as Id)}
+                disabled={branchesForTenant.length === 0}
+                className="h-9 w-full cursor-pointer rounded-md border border-input bg-card px-2 text-sm shadow-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                aria-label={t('topbar.branch')}
+              >
+                {branchesForTenant.length === 0 ? (
+                  <option value="">{t('topbar.noBranches')}</option>
+                ) : (
+                  branchesForTenant.map((b) => (
+                    <option key={b.id} value={b.id}>
+                      {b.name}
+                      {b.city ? ` · ${b.city}` : ''}
+                    </option>
+                  ))
+                )}
+              </select>
+            </label>
+          </div>
+
+          <div className="border-t border-border">
+            <button
+              type="button"
+              role="menuitem"
+              onClick={() => {
+                setOpen(false);
+                signOut();
+              }}
+              className="flex w-full cursor-pointer items-center gap-2 px-3 py-2.5 text-left text-sm text-foreground transition-colors hover:bg-muted"
+            >
+              <LogOut className="size-4 text-muted-foreground" aria-hidden="true" />
+              {t('login.signOut')}
+            </button>
+          </div>
         </div>
       ) : null}
     </div>

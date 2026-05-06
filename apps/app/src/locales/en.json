@@ -51,7 +51,10 @@
   "topbar": {
     "switchTo": "Switch to {{lang}}",
     "searchPlaceholder": "Search patients by name, phone, or LINE…",
-    "searchResults": "Patient search results"
+    "searchResults": "Patient search results",
+    "tenant": "Clinic",
+    "branch": "Branch",
+    "noBranches": "No branches available"
   },
   "dateNav": {
     "previous": "Previous day",

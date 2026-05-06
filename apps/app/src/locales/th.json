@@ -51,7 +51,10 @@
   "topbar": {
     "switchTo": "เปลี่ยนเป็น {{lang}}",
     "searchPlaceholder": "ค้นหาคนไข้จากชื่อ เบอร์โทร หรือ LINE…",
-    "searchResults": "ผลการค้นหาคนไข้"
+    "searchResults": "ผลการค้นหาคนไข้",
+    "tenant": "คลินิก",
+    "branch": "สาขา",
+    "noBranches": "ไม่มีสาขา"
   },
   "dateNav": {
     "previous": "วันก่อนหน้า",
