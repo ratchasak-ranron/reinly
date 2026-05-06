@@ -8,6 +8,7 @@ import { Select, type SelectOption } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { useDevToolbar } from '@/store/dev-toolbar';
 import { cn } from '@/lib/utils';
+import { BrandMark } from './brand-mark';
 
 const MOCKING_ENABLED = import.meta.env.VITE_ENABLE_MOCKS === 'true';
 
@@ -116,12 +117,7 @@ export function LoginPage() {
       <div className="w-full max-w-md">
         {/* Brand */}
         <div className="flex flex-col items-center gap-3 pb-8 text-center">
-          <span
-            aria-hidden="true"
-            className="flex size-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-card"
-          >
-            <span className="font-heading text-2xl font-bold">R</span>
-          </span>
+          <BrandMark size="lg" />
           <h1 className="font-heading text-3xl font-semibold tracking-tight text-foreground">
             {t('app.name')}
           </h1>

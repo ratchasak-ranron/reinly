@@ -6,6 +6,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/co
 import { Button } from '@/components/ui/button';
 import { ACCENT_CLASSES, NAV_GROUPS, NAV_ITEMS, type NavItem } from './nav-items';
 import { useIsRouteActive } from './use-is-route-active';
+import { BrandMark } from './brand-mark';
 import { cn } from '@/lib/utils';
 
 export function MobileNav() {
@@ -27,12 +28,7 @@ export function MobileNav() {
       <SheetContent side="left" className="w-72 p-0">
         <SheetHeader className="border-b border-border px-6 py-5">
           <SheetTitle className="flex items-center gap-2 font-heading text-lg font-semibold tracking-tight text-foreground">
-            <span
-              aria-hidden="true"
-              className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground"
-            >
-              <span className="text-base font-bold">R</span>
-            </span>
+            <BrandMark size="sm" />
             {t('app.name')}
           </SheetTitle>
         </SheetHeader>

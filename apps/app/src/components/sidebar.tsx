@@ -4,6 +4,7 @@ import { Link } from '@tanstack/react-router';
 import { ChevronLeft, ChevronRight, HelpCircle, Settings } from 'lucide-react';
 import { ACCENT_CLASSES, NAV_GROUPS, NAV_ITEMS, type NavItem } from './nav-items';
 import { useIsRouteActive } from './use-is-route-active';
+import { BrandMark } from './brand-mark';
 import { cn } from '@/lib/utils';
 
 /**
@@ -33,12 +34,7 @@ export function Sidebar() {
           expanded ? 'px-4' : 'justify-center',
         )}
       >
-        <span
-          aria-hidden="true"
-          className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-card"
-        >
-          <span className="font-heading text-base font-bold">R</span>
-        </span>
+        <BrandMark size="md" />
         {expanded ? (
           <span className="truncate font-heading text-lg font-semibold tracking-tight text-foreground">
             {t('app.name')}
