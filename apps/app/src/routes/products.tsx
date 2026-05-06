@@ -2,6 +2,7 @@ import { useMemo, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
 import {
+  GraduationCap,
   Layers,
   PackageSearch,
   Pencil,
@@ -15,7 +16,7 @@ import type {
   ProductCategory,
   ProductCreateInput,
 } from '@reinly/domain';
-import { isBundle } from '@reinly/domain';
+import { isBundle, isCoursePackage } from '@reinly/domain';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -278,21 +279,30 @@ function ProductRow({
         {formatCurrency(product.price, locale)}
       </td>
       <td className="px-5 py-3">
-        {bundle ? (
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1 rounded-full bg-indigo-soft px-2 py-0.5 text-[11px] font-medium text-indigo-ink">
-              <Layers className="size-3" aria-hidden="true" />
-              {t('product.bundleCount', { count: product.bundleItems.length })}
+        <div className="flex flex-wrap items-center gap-2">
+          {isCoursePackage(product) ? (
+            <span className="inline-flex items-center gap-1 rounded-full bg-violet-soft px-2 py-0.5 text-[11px] font-medium text-violet-ink">
+              <GraduationCap className="size-3" aria-hidden="true" />
+              {t('product.sessionsCount', { count: product.sessionsIncluded ?? 0 })}
             </span>
-            {savings > 0 ? (
-              <span className="text-[11px] tabular-nums text-emerald-ink">
-                -{formatCurrency(savings, locale)}
+          ) : null}
+          {bundle ? (
+            <>
+              <span className="inline-flex items-center gap-1 rounded-full bg-indigo-soft px-2 py-0.5 text-[11px] font-medium text-indigo-ink">
+                <Layers className="size-3" aria-hidden="true" />
+                {t('product.bundleCount', { count: product.bundleItems.length })}
               </span>
-            ) : null}
-          </div>
-        ) : (
-          <span className="text-xs text-muted-foreground">—</span>
-        )}
+              {savings > 0 ? (
+                <span className="text-[11px] tabular-nums text-emerald-ink">
+                  -{formatCurrency(savings, locale)}
+                </span>
+              ) : null}
+            </>
+          ) : null}
+          {!bundle && !isCoursePackage(product) ? (
+            <span className="text-xs text-muted-foreground">—</span>
+          ) : null}
+        </div>
       </td>
       <td className="px-5 py-3 text-right">
         <div className="inline-flex items-center gap-1">
@@ -341,6 +351,9 @@ function ProductForm({ products, initial, onCancel, onDone }: ProductFormProps) 
   const [price, setPrice] = useState<number>(initial?.price ?? 0);
   const [description, setDescription] = useState(initial?.description ?? '');
   const [bundleItems, setBundleItems] = useState<BundleItem[]>(initial?.bundleItems ?? []);
+  const [sessionsIncluded, setSessionsIncluded] = useState<number>(
+    initial?.sessionsIncluded ?? 0,
+  );
   const [error, setError] = useState<string | null>(null);
 
   const candidates = useMemo(
@@ -379,6 +392,10 @@ function ProductForm({ products, initial, onCancel, onDone }: ProductFormProps) 
       setError(t('product.errors.priceInvalid'));
       return;
     }
+    if (sessionsIncluded < 0 || sessionsIncluded > 100) {
+      setError(t('product.errors.sessionsInvalid'));
+      return;
+    }
 
     const payload: ProductCreateInput = {
       sku: sku.trim(),
@@ -387,6 +404,7 @@ function ProductForm({ products, initial, onCancel, onDone }: ProductFormProps) 
       price,
       description: description.trim() || undefined,
       bundleItems,
+      sessionsIncluded: sessionsIncluded > 0 ? sessionsIncluded : undefined,
       active: initial?.active ?? true,
     };
 
@@ -434,18 +452,38 @@ function ProductForm({ products, initial, onCancel, onDone }: ProductFormProps) 
         />
       </div>
 
-      <div className="space-y-1.5">
-        <Label htmlFor="product-price">{t('product.col.price')}</Label>
-        <Input
-          id="product-price"
-          type="number"
-          inputMode="decimal"
-          min={0}
-          step="0.01"
-          value={price}
-          onChange={(e) => setPrice(Number(e.target.value) || 0)}
-          required
-        />
+      <div className="grid grid-cols-2 gap-3">
+        <div className="space-y-1.5">
+          <Label htmlFor="product-price">{t('product.col.price')}</Label>
+          <Input
+            id="product-price"
+            type="number"
+            inputMode="decimal"
+            min={0}
+            step="0.01"
+            value={price}
+            onChange={(e) => setPrice(Number(e.target.value) || 0)}
+            required
+          />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="product-sessions">{t('product.sessionsIncluded')}</Label>
+          <Input
+            id="product-sessions"
+            type="number"
+            inputMode="numeric"
+            min={0}
+            max={100}
+            value={sessionsIncluded}
+            onChange={(e) =>
+              setSessionsIncluded(Math.max(0, Number(e.target.value) || 0))
+            }
+            placeholder="0"
+          />
+          <p className="text-xs text-muted-foreground">
+            {t('product.sessionsHelp')}
+          </p>
+        </div>
       </div>
 
       <div className="space-y-1.5">

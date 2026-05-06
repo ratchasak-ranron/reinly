@@ -30,6 +30,13 @@ export const ProductSchema = z.object({
    * implicit savings can be derived against the sum of child prices.
    */
   bundleItems: z.array(BundleItemSchema).default([]),
+  /**
+   * Optional session quota — when set, buying the product entitles the
+   * patient to that many sessions of the service. Drives course
+   * creation: the cashier can pick the product, and the resulting
+   * Course inherits its name, price, and session count.
+   */
+  sessionsIncluded: z.number().int().positive().max(100).optional(),
   description: z.string().max(500).optional(),
   active: z.boolean().default(true),
   createdAt: IsoDateSchema,
@@ -42,7 +49,12 @@ export const ProductCreateSchema = ProductSchema.omit({
   tenantId: true,
   createdAt: true,
   updatedAt: true,
-}).partial({ bundleItems: true, active: true, description: true });
+}).partial({
+  bundleItems: true,
+  active: true,
+  description: true,
+  sessionsIncluded: true,
+});
 export type ProductCreateInput = z.infer<typeof ProductCreateSchema>;
 
 export const ProductUpdateSchema = ProductCreateSchema.partial();
@@ -50,4 +62,15 @@ export type ProductUpdateInput = z.infer<typeof ProductUpdateSchema>;
 
 export function isBundle(product: Pick<Product, 'bundleItems'>): boolean {
   return product.bundleItems.length > 0;
+}
+
+/**
+ * A product is a "course package" when it carries a session quota.
+ * Buying one drives creation of a Course with the matching session
+ * count, name, and price.
+ */
+export function isCoursePackage(
+  product: Pick<Product, 'sessionsIncluded'>,
+): boolean {
+  return typeof product.sessionsIncluded === 'number' && product.sessionsIncluded > 0;
 }

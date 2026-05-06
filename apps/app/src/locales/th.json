@@ -264,6 +264,10 @@
     "newCourse": "เพิ่มคอร์ส",
     "newCourseDescription": "สร้างแพ็กเกจหลายเซสชันให้คนไข้",
     "patient": "คนไข้",
+    "fromProduct": "เลือกจากสินค้าแพ็กเกจ",
+    "fromProductHelp": "เลือกสินค้าแพ็กเกจเพื่อเติมชื่อบริการ จำนวนเซสชัน และราคาให้อัตโนมัติ",
+    "manualEntry": "— กรอกเอง —",
+    "productOption": "{{name}} · {{count}} ครั้ง",
     "errors": {
       "patientRequired": "เลือกคนไข้",
       "serviceRequired": "ต้องระบุบริการ",
@@ -611,6 +615,9 @@
     "searchPlaceholder": "ค้นหาสินค้า…",
     "description": "รายละเอียด",
     "bundleCount": "ชุด {{count}} รายการ",
+    "sessionsCount": "{{count}} ครั้ง",
+    "sessionsIncluded": "จำนวนครั้งต่อแพ็กเกจ",
+    "sessionsHelp": "ใส่มากกว่า 0 เพื่อให้สินค้านี้เป็นแพ็กเกจคอร์ส",
     "empty": {
       "list": "ยังไม่มีสินค้า",
       "filter": "ไม่มีสินค้าตรงเงื่อนไข"
@@ -618,7 +625,8 @@
     "errors": {
       "tenantRequired": "เลือกคลินิกก่อน",
       "required": "ต้องกรอกรหัสและชื่อ",
-      "priceInvalid": "ราคาต้องไม่ติดลบ"
+      "priceInvalid": "ราคาต้องไม่ติดลบ",
+      "sessionsInvalid": "จำนวนครั้งต้องอยู่ระหว่าง 0-100"
     },
     "col": {
       "sku": "รหัส",

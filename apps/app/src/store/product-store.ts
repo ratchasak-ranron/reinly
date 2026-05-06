@@ -34,6 +34,7 @@ export const useProductStore = create<ProductState>()(
           category: input.category,
           price: input.price,
           bundleItems: input.bundleItems ?? [],
+          sessionsIncluded: input.sessionsIncluded,
           description: input.description,
           active: input.active ?? true,
           createdAt: now,
@@ -78,6 +79,29 @@ const SEED_PRODUCTS: ReadonlyArray<ProductCreateInput> = [
   { sku: 'BTX-20', name: 'Botox 20U', category: 'aesthetic', price: 8500 },
   { sku: 'FLR-RT', name: 'Filler retreatment', category: 'aesthetic', price: 12500 },
   { sku: 'MEM-VIP', name: 'VIP membership (annual)', category: 'membership', price: 25000 },
+  // Course packages — buying these auto-creates a multi-session Course
+  // for the patient.
+  {
+    sku: 'LSR-FAC-6',
+    name: 'Laser facial — 6 sessions',
+    category: 'aesthetic',
+    price: 24000,
+    sessionsIncluded: 6,
+  },
+  {
+    sku: 'LSR-HAIR-10',
+    name: 'Laser hair removal — 10 sessions',
+    category: 'aesthetic',
+    price: 35000,
+    sessionsIncluded: 10,
+  },
+  {
+    sku: 'CLN-PKG-4',
+    name: 'Cleaning package — 4 visits',
+    category: 'dental',
+    price: 5400,
+    sessionsIncluded: 4,
+  },
 ];
 
 /**

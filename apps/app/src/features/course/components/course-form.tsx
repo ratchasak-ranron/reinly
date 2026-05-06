@@ -1,12 +1,15 @@
 import { useMemo, useRef, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
+import { GraduationCap } from 'lucide-react';
 import type { CourseCreateInput, Patient } from '@reinly/domain';
+import { isCoursePackage } from '@reinly/domain';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select } from '@/components/ui/select';
 import { FormError } from '@/components/ui/form-feedback';
 import { usePatients } from '@/features/patient';
+import { useProducts } from '@/store/product-store';
 import { useCreateCourse } from '../hooks/use-courses';
 
 interface CourseFormProps {
@@ -15,18 +18,40 @@ interface CourseFormProps {
   onCancel: () => void;
 }
 
+const MANUAL_OPTION = '__manual__';
+
 export function CourseForm({ patientId, onDone, onCancel }: CourseFormProps) {
   const { t } = useTranslation();
   const create = useCreateCourse();
+  const products = useProducts();
   const submittingRef = useRef(false);
 
   const patientLocked = !!patientId;
-  const patients = usePatients(patientLocked ? '' : '');
+  const patients = usePatients('');
   const patientOptions = useMemo(() => {
     const arr = patients.data ?? [];
     return arr.map((p: Patient) => ({ value: p.id, label: p.fullName }));
   }, [patients.data]);
 
+  const packageProducts = useMemo(
+    () => products.filter((p) => p.active && isCoursePackage(p)),
+    [products],
+  );
+  const productOptions = useMemo(
+    () => [
+      { value: MANUAL_OPTION, label: t('course.manualEntry') },
+      ...packageProducts.map((p) => ({
+        value: p.id,
+        label: t('course.productOption', {
+          name: p.name,
+          count: p.sessionsIncluded ?? 0,
+        }),
+      })),
+    ],
+    [packageProducts, t],
+  );
+
+  const [productId, setProductId] = useState<string>(MANUAL_OPTION);
   const [selectedPatient, setSelectedPatient] = useState<string>(
     patientId ?? patientOptions[0]?.value ?? '',
   );
@@ -35,6 +60,16 @@ export function CourseForm({ patientId, onDone, onCancel }: CourseFormProps) {
   const [pricePaid, setPricePaid] = useState<number>(0);
   const [expiresAt, setExpiresAt] = useState('');
   const [error, setError] = useState<string | null>(null);
+
+  function handleProductChange(next: string) {
+    setProductId(next);
+    if (next === MANUAL_OPTION) return;
+    const product = packageProducts.find((p) => p.id === next);
+    if (!product) return;
+    setServiceName(product.name);
+    setSessionsTotal(product.sessionsIncluded ?? 1);
+    setPricePaid(product.price);
+  }
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -64,7 +99,7 @@ export function CourseForm({ patientId, onDone, onCancel }: CourseFormProps) {
       serviceName: serviceName.trim(),
       sessionsTotal,
       pricePaid,
-      expiresAt: expiresAt ? new Date(expiresAt).toISOString() : undefined,
+      expiresAt: expiresAt ? `${expiresAt}T00:00:00.000Z` : undefined,
     };
 
     submittingRef.current = true;
@@ -96,12 +131,33 @@ export function CourseForm({ patientId, onDone, onCancel }: CourseFormProps) {
         </div>
       ) : null}
 
+      {packageProducts.length > 0 ? (
+        <div className="space-y-1.5">
+          <Label htmlFor="course-product">
+            <span className="inline-flex items-center gap-1.5">
+              <GraduationCap className="size-4 text-violet-ink" aria-hidden="true" />
+              {t('course.fromProduct')}
+            </span>
+          </Label>
+          <Select
+            id="course-product"
+            options={productOptions}
+            value={productId}
+            onValueChange={handleProductChange}
+          />
+          <p className="text-xs text-muted-foreground">{t('course.fromProductHelp')}</p>
+        </div>
+      ) : null}
+
       <div className="space-y-1.5">
         <Label htmlFor="course-service">{t('course.service')}</Label>
         <Input
           id="course-service"
           value={serviceName}
-          onChange={(e) => setServiceName(e.target.value)}
+          onChange={(e) => {
+            setServiceName(e.target.value);
+            setProductId(MANUAL_OPTION);
+          }}
           required
         />
       </div>
@@ -116,7 +172,10 @@ export function CourseForm({ patientId, onDone, onCancel }: CourseFormProps) {
             min={1}
             max={100}
             value={sessionsTotal}
-            onChange={(e) => setSessionsTotal(Number(e.target.value) || 0)}
+            onChange={(e) => {
+              setSessionsTotal(Number(e.target.value) || 0);
+              setProductId(MANUAL_OPTION);
+            }}
             required
           />
         </div>
@@ -129,7 +188,10 @@ export function CourseForm({ patientId, onDone, onCancel }: CourseFormProps) {
             min={0}
             step="0.01"
             value={pricePaid}
-            onChange={(e) => setPricePaid(Number(e.target.value) || 0)}
+            onChange={(e) => {
+              setPricePaid(Number(e.target.value) || 0);
+              setProductId(MANUAL_OPTION);
+            }}
             required
           />
         </div>

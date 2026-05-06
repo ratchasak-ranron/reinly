@@ -3,6 +3,7 @@ import {
   PromotionUpdateSchema,
   applyPromotion,
   isBundle,
+  isCoursePackage,
   isPromotionActive,
   type Product,
   type Promotion,
@@ -154,6 +155,27 @@ describe('isBundle', () => {
         bundleItems: [{ productId: '00000000-0000-0000-0000-000000000001', quantity: 1 }],
       }),
     ).toBe(true);
+  });
+});
+
+/* -------------------------------------------------------------------------- */
+/*  isCoursePackage                                                           */
+/* -------------------------------------------------------------------------- */
+
+describe('isCoursePackage', () => {
+  it('returns false when sessionsIncluded is undefined', () => {
+    expect(isCoursePackage({ sessionsIncluded: undefined })).toBe(false);
+  });
+
+  it('returns false when sessionsIncluded is 0 or negative', () => {
+    expect(isCoursePackage({ sessionsIncluded: 0 })).toBe(false);
+    expect(isCoursePackage({ sessionsIncluded: -1 })).toBe(false);
+  });
+
+  it('returns true when sessionsIncluded is a positive integer', () => {
+    expect(isCoursePackage({ sessionsIncluded: 1 })).toBe(true);
+    expect(isCoursePackage({ sessionsIncluded: 6 })).toBe(true);
+    expect(isCoursePackage({ sessionsIncluded: 100 })).toBe(true);
   });
 });
 

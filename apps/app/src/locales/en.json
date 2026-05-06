@@ -264,6 +264,10 @@
     "newCourse": "New course",
     "newCourseDescription": "Add a multi-session package for a patient.",
     "patient": "Patient",
+    "fromProduct": "Buy from product catalog",
+    "fromProductHelp": "Pick a packaged product to auto-fill the service, sessions, and price below.",
+    "manualEntry": "— Custom entry —",
+    "productOption": "{{name}} · {{count}} sessions",
     "errors": {
       "patientRequired": "Pick a patient",
       "serviceRequired": "Service name is required",
@@ -611,6 +615,9 @@
     "searchPlaceholder": "Search products…",
     "description": "Description",
     "bundleCount": "Bundle of {{count}}",
+    "sessionsCount": "{{count}} sessions",
+    "sessionsIncluded": "Sessions included",
+    "sessionsHelp": "Set > 0 to make this product a course package.",
     "empty": {
       "list": "No products yet",
       "filter": "No products match"
@@ -618,7 +625,8 @@
     "errors": {
       "tenantRequired": "Pick a clinic first",
       "required": "SKU and name are required",
-      "priceInvalid": "Price must be 0 or greater"
+      "priceInvalid": "Price must be 0 or greater",
+      "sessionsInvalid": "Sessions must be 0–100"
     },
     "col": {
       "sku": "SKU",
