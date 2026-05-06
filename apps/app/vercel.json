@@ -5,10 +5,9 @@
   "outputDirectory": "dist",
   "ignoreCommand": "cd ../.. && npx turbo-ignore @reinly/app",
   "framework": "vite",
-  "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/((?!assets|mockServiceWorker.js|favicon.svg|manifest.webmanifest|robots.txt).*)", "destination": "/index.html" }
+    { "source": "/:path*", "destination": "/index.html" }
   ],
   "headers": [
     {
