@@ -95,12 +95,14 @@ export function ReportsPage() {
                 value={String(month)}
                 onValueChange={(v) => setMonth(Number(v))}
                 aria-label={t('report.month')}
+                className="w-auto min-w-[7rem]"
               />
               <Select
                 options={yearOptions}
                 value={String(year)}
                 onValueChange={(v) => setYear(Number(v))}
                 aria-label={t('report.year')}
+                className="w-auto min-w-[5.5rem]"
               />
             </div>
           }
