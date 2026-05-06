@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { IdSchema } from '@reinly/domain';
 
 export const DEV_TOOLBAR_KEY = 'reinly:dev-toolbar';
-export const DEV_TOOLBAR_VERSION = 1;
+export const DEV_TOOLBAR_VERSION = 2;
 
 /**
  * Shape persisted by Zustand `persist` middleware for the dev toolbar.
@@ -14,6 +14,7 @@ export const PersistedDevToolbarSchema = z.object({
     tenantId: IdSchema.nullable(),
     branchId: IdSchema.nullable(),
     userId: IdSchema.nullable(),
+    authedAt: z.string().nullable(),
   }),
   version: z.number(),
 });

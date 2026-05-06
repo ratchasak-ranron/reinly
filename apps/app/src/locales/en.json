@@ -485,5 +485,14 @@
     "doctor": "Doctor",
     "receptionist": "Receptionist",
     "staff": "Staff"
+  },
+  "login": {
+    "mockingMode": "Mocking mode",
+    "title": "Pick a clinic to continue",
+    "subtitle": "Choose the clinic, branch, and user you want to impersonate.",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "realAuthHint": "Real authentication ships in a later phase.",
+    "footerNote": "© Reinly · Demo environment"
   }
 }
