@@ -13,11 +13,14 @@ i18n
       th: { translation: th },
       en: { translation: en },
     },
-    fallbackLng: 'en',
+    fallbackLng: 'th',
     supportedLngs: ['th', 'en'],
     interpolation: { escapeValue: false },
     detection: {
-      order: ['localStorage', 'navigator'],
+      // Skip navigator detection so non-Thai browsers also boot in Thai by
+      // default (clinic operators are Thai-first; English stays a manual
+      // toggle persisted in localStorage).
+      order: ['localStorage'],
       caches: ['localStorage'],
       lookupLocalStorage: 'reinly:lang',
     },
