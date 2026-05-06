@@ -8,52 +8,47 @@ interface BrandMarkProps {
 }
 
 const SIZE_CLASS: Record<BrandMarkSize, string> = {
-  sm: 'size-8 rounded-lg',
-  md: 'size-9 rounded-xl',
-  lg: 'size-14 rounded-2xl',
+  sm: 'size-8',
+  md: 'size-9',
+  lg: 'size-14',
 };
 
 /**
- * Reinly brand mark — gradient indigo→violet rounded tile with a
- * geometric "R" monogram and a small accent pulse dot. Replaces the
- * plain `<span>R</span>` placeholder used in the sidebar, mobile nav,
- * and login screen so the brand reads with more personality.
+ * Reinly brand mark — mirrors the favicon at apps/app/public/favicon.svg
+ * exactly so the in-app emblem and the browser tab read as the same
+ * mark: a dark slate rounded tile (#1F2328) with a lowercase serif `r`
+ * in cream (#F5F2EC). Used by the sidebar, mobile nav, and login
+ * screen.
  *
- * The mark renders a fixed 32×32 SVG and lets the outer container
- * scale it via Tailwind's `size-*` utilities, so a single SVG path
- * stays crisp at every call-site size.
+ * The favicon is the source of truth — re-export the same viewBox
+ * here so a future favicon refresh propagates by tweaking the SVG
+ * path rather than two separate places.
  */
 export function BrandMark({ size = 'md', className }: BrandMarkProps) {
   return (
-    <span
+    <svg
       aria-hidden="true"
+      viewBox="0 0 32 32"
+      xmlns="http://www.w3.org/2000/svg"
       className={cn(
-        'relative inline-flex shrink-0 items-center justify-center overflow-hidden',
-        'bg-gradient-to-br from-indigo via-indigo to-violet text-primary-foreground',
-        'shadow-card ring-1 ring-inset ring-white/15',
+        'shrink-0 shadow-card',
         // eslint-disable-next-line security/detect-object-injection -- size is a constant union literal
         SIZE_CLASS[size],
         className,
       )}
     >
-      <svg
-        viewBox="0 0 32 32"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true"
-        className="size-[70%]"
+      <rect width="32" height="32" rx="6" fill="#1F2328" />
+      <text
+        x="50%"
+        y="60%"
+        textAnchor="middle"
+        fill="#F5F2EC"
+        fontSize="22"
+        fontFamily='Georgia, "Playfair Display", serif'
+        fontWeight="700"
       >
-        {/* Stylized R glyph: vertical stem, rounded counter, sharp leg.
-            Drawn as a single filled path so the gradient backdrop
-            shows through the negative space inside the bowl. */}
-        <path
-          d="M9 6 H17.5 a6 6 0 0 1 0 12 H13 l5 8 H14 l-5 -8 V26 H9 Z M13 9 V15 H17 a3 3 0 0 0 0 -6 Z"
-          fill="currentColor"
-          fillRule="evenodd"
-        />
-        {/* Small accent dot — reads as a "pulse" marker, sits above the
-            R like a notification dot to add recall. */}
-        <circle cx="24" cy="9" r="2.25" fill="hsl(var(--amber))" />
-      </svg>
-    </span>
+        r
+      </text>
+    </svg>
   );
 }
