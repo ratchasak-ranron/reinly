@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -21,23 +21,30 @@ export interface UsePaginationResult<T> {
  * Client-side pagination over an in-memory array.
  *
  * Resets to page 1 whenever the input length or pageSize changes so the
- * caller never has to manage that edge case.
+ * caller never has to manage that edge case. The reset is performed
+ * during render via the React-recommended "adjust state on prop change"
+ * pattern, so callers never observe a stale `page` value (no double-
+ * render flash).
  */
 export function usePagination<T>(
   items: readonly T[] | undefined,
   initialPageSize: number = DEFAULT_PAGE_SIZE,
 ): UsePaginationResult<T> {
-  const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(initialPageSize);
-
   const total = items?.length ?? 0;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
-  useEffect(() => {
-    setPage(1);
-  }, [total, pageSize]);
+  const [page, setPage] = useState(1);
+  const [prevTotal, setPrevTotal] = useState(total);
+  const [prevPageSize, setPrevPageSize] = useState(pageSize);
 
-  const safePage = Math.min(page, totalPages);
+  if (prevTotal !== total || prevPageSize !== pageSize) {
+    setPrevTotal(total);
+    setPrevPageSize(pageSize);
+    setPage(1);
+  }
+
+  const safePage = Math.min(Math.max(1, page), totalPages);
 
   const pageItems = useMemo(() => {
     if (!items) return [];
@@ -199,10 +206,13 @@ function PageButton({ active, className, children, disabled, ...rest }: PageButt
 
 /**
  * Build the visible page sequence with ellipses.
- * Always shows first + last page, current page +/- 1 neighbor, and an
- * "ellipsis" sentinel where pages are skipped.
+ *
+ * Always shows first + last page and the current page +/- 1 neighbor.
+ * Where exactly one page would be hidden, render that page directly
+ * instead of an ellipsis — an ellipsis must represent at least two
+ * skipped pages.
  */
-function pageRange(current: number, total: number): Array<number | 'ellipsis'> {
+export function pageRange(current: number, total: number): Array<number | 'ellipsis'> {
   if (total <= 7) {
     return Array.from({ length: total }, (_, i) => i + 1);
   }
@@ -211,9 +221,20 @@ function pageRange(current: number, total: number): Array<number | 'ellipsis'> {
   const start = Math.max(2, current - 1);
   const end = Math.min(total - 1, current + 1);
 
-  if (start > 2) result.push('ellipsis');
+  if (start === 3) {
+    result.push(2);
+  } else if (start > 3) {
+    result.push('ellipsis');
+  }
+
   for (let p = start; p <= end; p++) result.push(p);
-  if (end < total - 1) result.push('ellipsis');
+
+  if (end === total - 2) {
+    result.push(total - 1);
+  } else if (end < total - 2) {
+    result.push('ellipsis');
+  }
+
   result.push(total);
 
   return result;

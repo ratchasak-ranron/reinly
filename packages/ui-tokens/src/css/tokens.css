@@ -65,7 +65,7 @@
 
   /* Section accents — surface fills + text-safe (-ink) + soft wash */
   --indigo: 239 84% 67%;              /* #6366F1 indigo-500 — Today (aliased to primary) */
-  --indigo-ink: 244 76% 59%;          /* #4F46E5 indigo-600, 5.4:1 */
+  --indigo-ink: 243 75% 59%;          /* #4F46E5 indigo-600, 5.4:1 */
   --indigo-soft: 226 100% 97%;        /* #EEF2FF indigo-50 */
 
   --sky: 199 89% 48%;                 /* #0EA5E9 — Patients */
