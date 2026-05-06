@@ -56,7 +56,7 @@ export function Sidebar() {
       >
         <BrandMark size="md" />
         {expanded ? (
-          <span className="truncate font-heading text-lg font-semibold tracking-tight text-foreground">
+          <span className="truncate font-heading text-2xl font-semibold tracking-tight text-foreground">
             {t('app.name')}
           </span>
         ) : null}
