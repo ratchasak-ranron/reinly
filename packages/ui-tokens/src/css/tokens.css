@@ -18,8 +18,8 @@
  */
 
 :root {
-  /* Brand */
-  --primary: 239 84% 67%;             /* #6366F1 indigo-500 */
+  /* Brand — bright blue (Dentalica-style clinic theme). */
+  --primary: 217 91% 60%;             /* #3B82F6 blue-500 */
   --primary-foreground: 0 0% 100%;
   --secondary: 240 5% 26%;            /* #3F3F46 zinc-700 — neutral secondary */
   --secondary-foreground: 0 0% 100%;
@@ -48,7 +48,7 @@
   /* Lines */
   --border: 240 6% 90%;               /* #E4E4E7 zinc-200 */
   --input: 240 6% 90%;
-  --ring: 239 84% 67%;                /* match primary */
+  --ring: 217 91% 60%;                /* match primary */
 
   /* Text */
   --foreground: 240 10% 4%;           /* #09090B zinc-950 */
@@ -64,9 +64,9 @@
   --shadow-hover: 0 2px 4px 0 hsl(240 6% 10% / 0.06), 0 4px 12px -2px hsl(240 6% 10% / 0.10);
 
   /* Section accents — surface fills + text-safe (-ink) + soft wash */
-  --indigo: 239 84% 67%;              /* #6366F1 — Today */
-  --indigo-ink: 239 84% 56%;          /* #4F46E5 indigo-600, 5.4:1 */
-  --indigo-soft: 239 100% 96%;        /* #EEF2FF indigo-50 */
+  --indigo: 217 91% 60%;              /* #3B82F6 blue-500 — Today (aliased to primary) */
+  --indigo-ink: 221 83% 53%;          /* #2563EB blue-600, 5.0:1 */
+  --indigo-soft: 214 100% 97%;        /* #EFF6FF blue-50 */
 
   --sky: 199 89% 48%;                 /* #0EA5E9 — Patients */
   --sky-ink: 200 98% 39%;             /* #0284C7 sky-600, 4.6:1 */
@@ -107,11 +107,11 @@
   --input: 240 4% 16%;
   --foreground: 0 0% 98%;
 
-  --primary: 239 84% 71%;             /* lighter indigo for dark bg */
+  --primary: 217 91% 70%;             /* lighter blue for dark bg */
   --primary-foreground: 240 10% 4%;
   --secondary: 240 5% 65%;
   --secondary-foreground: 240 10% 4%;
-  --ring: 239 84% 71%;
+  --ring: 217 91% 70%;
 
   --success: 160 64% 45%;
   --success-foreground: 240 10% 4%;
@@ -127,9 +127,9 @@
   --shadow-hover: 0 2px 4px 0 hsl(0 0% 0% / 0.5), 0 4px 12px -2px hsl(0 0% 0% / 0.6);
 
   /* Section accents — lift lightness for dark bg */
-  --indigo: 239 84% 71%;
-  --indigo-ink: 239 84% 78%;
-  --indigo-soft: 239 30% 18%;
+  --indigo: 217 91% 70%;
+  --indigo-ink: 217 91% 78%;
+  --indigo-soft: 217 30% 18%;
 
   --sky: 199 89% 60%;
   --sky-ink: 199 89% 70%;

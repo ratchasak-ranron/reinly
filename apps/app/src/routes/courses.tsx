@@ -20,6 +20,7 @@ import { PageHeader } from '@/components/page-header';
 import { TenantGate } from '@/components/tenant-gate';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { SegmentedTabs } from '@/components/ui/segmented-tabs';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EmptyState } from '@/components/ui/empty-state';
 import { useDebounce } from '@/lib/use-debounce';
@@ -255,28 +256,13 @@ function FilterPills({
   t: TFunction;
 }) {
   return (
-    <div className="flex flex-wrap gap-2" role="tablist" aria-label="status filter">
-      {FILTER_KEYS.map((f) => {
-        const active = filter === f.key;
-        return (
-          <button
-            key={f.key}
-            type="button"
-            role="tab"
-            aria-selected={active}
-            onClick={() => setFilter(f.key)}
-            className={cn(
-              'cursor-pointer rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-              active
-                ? 'border-violet bg-violet-soft text-violet-ink'
-                : 'border-border bg-card text-muted-foreground hover:bg-muted hover:text-foreground',
-            )}
-          >
-            {t(f.labelKey)}
-          </button>
-        );
-      })}
-    </div>
+    <SegmentedTabs<StatusFilter>
+      ariaLabel="status filter"
+      accent="violet"
+      value={filter}
+      onChange={setFilter}
+      options={FILTER_KEYS.map((f) => ({ value: f.key, label: t(f.labelKey) }))}
+    />
   );
 }
 

@@ -14,7 +14,9 @@
     "reports": "รายงาน",
     "audit": "Audit Log",
     "menu": "เปิดเมนู",
-    "consent": "PDPA"
+    "consent": "PDPA",
+    "collapse": "ย่อเมนู",
+    "expand": "ขยายเมนู"
   },
   "common": {
     "loading": "กำลังโหลด...",
@@ -30,7 +32,8 @@
     "noTenant": "เลือกคลินิกใน Dev Toolbar",
     "switchLanguage": "English",
     "skipToMain": "ข้ามไปยังเนื้อหาหลัก",
-    "close": "ปิด"
+    "close": "ปิด",
+    "notifications": "การแจ้งเตือน"
   },
   "topbar": {
     "switchTo": "เปลี่ยนเป็น {{lang}}"
@@ -87,6 +90,10 @@
       "title": "สิ่งที่ต้องดู",
       "lowStock": "สต็อกต่ำ",
       "consentExpiring": "ความยินยอมใกล้หมดอายุ"
+    },
+    "delta": {
+      "thisMonth": "เดือนนี้",
+      "thisWeek": "สัปดาห์นี้"
     }
   },
   "patient": {
@@ -472,5 +479,11 @@
     "user": "ผู้ใช้",
     "reset": "รีเซ็ตข้อมูล",
     "none": "—"
+  },
+  "role": {
+    "owner": "เจ้าของคลินิก",
+    "doctor": "แพทย์",
+    "receptionist": "พนักงานต้อนรับ",
+    "staff": "เจ้าหน้าที่"
   }
 }

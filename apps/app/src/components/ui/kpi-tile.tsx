@@ -1,5 +1,5 @@
 /* eslint-disable security/detect-object-injection -- status/accent are constant union literals */
-import type { LucideIcon } from 'lucide-react';
+import { TrendingDown, TrendingUp, type LucideIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Sparkline } from '@/components/ui/sparkline';
@@ -7,6 +7,15 @@ import { cn } from '@/lib/utils';
 
 type Status = 'default' | 'warning' | 'destructive';
 type Accent = 'indigo' | 'sky' | 'emerald' | 'violet' | 'amber' | 'rose' | 'zinc';
+
+export interface KpiDelta {
+  /** Numeric delta. Positive = up, negative = down. */
+  value: number;
+  /** Suffix label (e.g. "เดือนนี้", "vs last week"). */
+  label: string;
+  /** Whether positive movement is good. Defaults to true. */
+  positiveIsGood?: boolean;
+}
 
 interface KpiTileProps {
   label: string;
@@ -17,6 +26,8 @@ interface KpiTileProps {
   status?: Status;
   /** Section accent for the icon chip + dot. Status overrides accent. */
   accent?: Accent;
+  /** Optional period-over-period delta indicator (Dentalica-style). */
+  delta?: KpiDelta;
 }
 
 const STATUS_CHIP: Record<Status, string> = {
@@ -59,6 +70,7 @@ export function KpiTile({
   trend,
   status = 'default',
   accent,
+  delta,
 }: KpiTileProps) {
   const { t } = useTranslation();
   const useAccent = status === 'default' && accent !== undefined;
@@ -92,10 +104,42 @@ export function KpiTile({
         {description ? (
           <p className="text-xs text-muted-foreground">{description}</p>
         ) : null}
+        {delta ? <DeltaIndicator delta={delta} /> : null}
         {trend && trend.length >= 2 ? (
           <Sparkline data={trend} ariaLabel={`${label} trend`} variant={status} />
         ) : null}
       </CardContent>
     </Card>
+  );
+}
+
+/**
+ * Period-over-period delta line — "↑ +4 เดือนนี้" in emerald-ink when good,
+ * rose-ink when bad. Matches the `+N In this Month` / `+16` indicators on
+ * the Dentalica reference.
+ */
+export function DeltaIndicator({ delta }: { delta: KpiDelta }) {
+  const positiveIsGood = delta.positiveIsGood ?? true;
+  const positive = delta.value > 0;
+  const negative = delta.value < 0;
+  // "Good" colour when value moves in the right direction.
+  const isGood = positive ? positiveIsGood : negative ? !positiveIsGood : false;
+  const tone = delta.value === 0
+    ? 'text-muted-foreground'
+    : isGood
+      ? 'text-emerald-ink'
+      : 'text-rose-ink';
+  const Arrow = positive ? TrendingUp : negative ? TrendingDown : null;
+  const formatted = delta.value > 0
+    ? `+${delta.value}`
+    : delta.value < 0
+      ? String(delta.value)
+      : '0';
+  return (
+    <p className={cn('inline-flex items-center gap-1 text-[11px] font-medium', tone)}>
+      {Arrow ? <Arrow className="size-3" aria-hidden="true" /> : null}
+      <span className="tabular-nums">{formatted}</span>
+      <span className="text-muted-foreground">· {delta.label}</span>
+    </p>
   );
 }

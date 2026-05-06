@@ -21,6 +21,7 @@ import {
 import { FormError } from '@/components/ui/form-feedback';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { SegmentedTabs } from '@/components/ui/segmented-tabs';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EmptyState } from '@/components/ui/empty-state';
 import { useDevToolbar } from '@/store/dev-toolbar';
@@ -310,28 +311,13 @@ function FilterPills({
   t: TFunction;
 }) {
   return (
-    <div className="flex flex-wrap gap-2" role="tablist" aria-label="status filter">
-      {FILTER_KEYS.map((f) => {
-        const active = filter === f.key;
-        return (
-          <button
-            key={f.key}
-            type="button"
-            role="tab"
-            aria-selected={active}
-            onClick={() => setFilter(f.key)}
-            className={cn(
-              'cursor-pointer rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-              active
-                ? 'border-rose bg-rose-soft text-rose-ink'
-                : 'border-border bg-card text-muted-foreground hover:bg-muted hover:text-foreground',
-            )}
-          >
-            {t(f.labelKey)}
-          </button>
-        );
-      })}
-    </div>
+    <SegmentedTabs<StatusFilter>
+      ariaLabel="status filter"
+      accent="rose"
+      value={filter}
+      onChange={setFilter}
+      options={FILTER_KEYS.map((f) => ({ value: f.key, label: t(f.labelKey) }))}
+    />
   );
 }
 

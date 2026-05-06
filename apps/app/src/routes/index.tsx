@@ -18,6 +18,7 @@ import type { Appointment, Patient, WalkIn } from '@reinly/domain';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Sparkline } from '@/components/ui/sparkline';
+import { DeltaIndicator, type KpiDelta } from '@/components/ui/kpi-tile';
 import { TenantGate } from '@/components/tenant-gate';
 import { useDevToolbar } from '@/store/dev-toolbar';
 import { usePatients } from '@/features/patient';
@@ -70,6 +71,7 @@ function HomePage() {
             hint={t('home.kpi.queueHint')}
             accent="sky"
             trend={mockTrend(dashboard.kpis.queueDepth, 1)}
+            delta={{ value: mockDelta(dashboard.kpis.queueDepth, 1), label: t('home.delta.thisWeek') }}
           />
           <BentoKpi
             label={t('home.kpi.booked')}
@@ -78,6 +80,7 @@ function HomePage() {
             hint={t('home.kpi.bookedHint')}
             accent="emerald"
             trend={mockTrend(dashboard.kpis.appointmentsBooked, 2)}
+            delta={{ value: mockDelta(dashboard.kpis.appointmentsBooked, 2), label: t('home.delta.thisWeek') }}
           />
           <BentoKpi
             label={t('home.kpi.done')}
@@ -86,6 +89,7 @@ function HomePage() {
             hint={t('home.kpi.doneHint')}
             accent="violet"
             trend={mockTrend(dashboard.kpis.walkInsCompleted, 3)}
+            delta={{ value: mockDelta(dashboard.kpis.walkInsCompleted, 3), label: t('home.delta.thisWeek') }}
           />
           <BentoKpi
             label={t('home.kpi.alerts')}
@@ -94,6 +98,11 @@ function HomePage() {
             hint={t('home.kpi.alertsHint')}
             accent={dashboard.kpis.lowStockAlerts > 0 ? 'amber' : 'rose'}
             trend={mockTrend(dashboard.kpis.lowStockAlerts, 4)}
+            delta={{
+              value: mockDelta(dashboard.kpis.lowStockAlerts, 4),
+              label: t('home.delta.thisWeek'),
+              positiveIsGood: false,
+            }}
           />
         </section>
 
@@ -324,6 +333,7 @@ function BentoKpi({
   icon: Icon,
   accent,
   trend,
+  delta,
 }: {
   label: string;
   value: number;
@@ -331,6 +341,7 @@ function BentoKpi({
   icon: typeof Users;
   accent: BentoAccent;
   trend: number[];
+  delta?: KpiDelta;
 }) {
   const chipClass = BENTO_BG[accent];
   const dotClass = BENTO_DOT[accent];
@@ -355,6 +366,7 @@ function BentoKpi({
         {value}
       </p>
       <p className="mt-2 text-xs text-muted-foreground">{hint}</p>
+      {delta ? <div className="mt-1.5"><DeltaIndicator delta={delta} /></div> : null}
       <div className="mt-3 -mb-1 -ml-1 -mr-1 opacity-80">
         <Sparkline
           data={trend}
@@ -373,6 +385,19 @@ function BentoKpi({
  * `trend7` field on the dashboard hook once the server tracks daily
  * snapshots.
  */
+/**
+ * Deterministic period-over-period delta. Anchored on the live value and
+ * the seed so each KPI reads as either +N up or -N down without flicker
+ * across renders. Replace with `(current - previous)` once the dashboard
+ * hook tracks day-7 snapshots.
+ */
+function mockDelta(value: number, seed: number): number {
+  const base = Math.max(1, value);
+  const sign = (seed % 2 === 0 ? 1 : -1);
+  const magnitude = Math.max(1, Math.round(base * 0.18 + (seed % 3)));
+  return sign * magnitude;
+}
+
 function mockTrend(value: number, seed: number): number[] {
   const out: number[] = [];
   const base = Math.max(1, value);

@@ -14,7 +14,9 @@
     "reports": "Reports",
     "audit": "Audit Log",
     "menu": "Open menu",
-    "consent": "PDPA"
+    "consent": "PDPA",
+    "collapse": "Collapse menu",
+    "expand": "Expand menu"
   },
   "common": {
     "loading": "Loading...",
@@ -30,7 +32,8 @@
     "noTenant": "Pick a tenant in the Dev Toolbar",
     "switchLanguage": "ภาษาไทย",
     "skipToMain": "Skip to main content",
-    "close": "Close"
+    "close": "Close",
+    "notifications": "Notifications"
   },
   "topbar": {
     "switchTo": "Switch to {{lang}}"
@@ -87,6 +90,10 @@
       "title": "Heads up",
       "lowStock": "Low stock",
       "consentExpiring": "Consent expiring"
+    },
+    "delta": {
+      "thisMonth": "this month",
+      "thisWeek": "this week"
     }
   },
   "patient": {
@@ -472,5 +479,11 @@
     "user": "User",
     "reset": "Reset data",
     "none": "—"
+  },
+  "role": {
+    "owner": "Owner",
+    "doctor": "Doctor",
+    "receptionist": "Receptionist",
+    "staff": "Staff"
   }
 }
