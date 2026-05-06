@@ -22,7 +22,7 @@ export function Sidebar() {
   return (
     <aside
       className={cn(
-        'hidden shrink-0 flex-col border-r border-border bg-card transition-[width] duration-200 md:flex',
+        'sticky top-0 hidden h-screen shrink-0 flex-col border-r border-border bg-card transition-[width] duration-200 md:flex',
         expanded ? 'w-60' : 'w-16',
       )}
     >
@@ -65,7 +65,7 @@ export function Sidebar() {
 
       {/* Primary nav */}
       <nav
-        className={cn('flex-1 space-y-0.5', expanded ? 'px-3' : 'px-2')}
+        className={cn('flex-1 space-y-0.5 overflow-y-auto', expanded ? 'px-3' : 'px-2')}
         aria-label={t('nav.primary')}
       >
         {NAV_ITEMS.map((item) => (
