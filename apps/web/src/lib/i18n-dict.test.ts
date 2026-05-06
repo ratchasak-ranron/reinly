@@ -33,6 +33,6 @@ describe('makeT (th)', () => {
   it('returns Thai translation for a known key', () => {
     const t = makeT('th');
     expect(t('home.heroLine1')).toBe('ซอฟต์แวร์คลินิก');
-    expect(t('home.heroLine2')).toBe('ที่กลั่นมาแล้ว');
+    expect(t('home.heroLine2')).toBe('เน้นที่จำเป็น');
   });
 });

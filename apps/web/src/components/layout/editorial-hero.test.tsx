@@ -45,6 +45,6 @@ describe('EditorialHero', () => {
     expect(screen.getByText(/เรียบง่ายโดยตั้งใจ/)).toBeInTheDocument();
     const heading = screen.getByRole('heading', { level: 1 });
     expect(heading).toHaveTextContent('ซอฟต์แวร์คลินิก');
-    expect(heading).toHaveTextContent('ที่กลั่นมาแล้ว');
+    expect(heading).toHaveTextContent('เน้นที่จำเป็น');
   });
 });
