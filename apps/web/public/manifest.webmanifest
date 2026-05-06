@@ -1,6 +1,6 @@
 {
-  "name": "Reinly — Clinic software, distilled.",
-  "short_name": "Reinly",
+  "name": "reinly — Clinic software, distilled.",
+  "short_name": "reinly",
   "description": "Clinic software, distilled — patient records, courses, billing, multi-branch reports. Fair price, no contracts.",
   "start_url": "/en",
   "scope": "/",

@@ -1,5 +1,5 @@
 export const siteConfig = {
-  name: 'Reinly',
+  name: 'reinly',
   tagline: 'Clinic software, distilled.',
   hostname: 'https://getreinly.com',
   locales: ['en', 'th'] as const,

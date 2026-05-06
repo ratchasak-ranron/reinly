@@ -7,6 +7,7 @@ import { localeSwitchHref } from '@/lib/locale-utils';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { siteConfig, type Locale } from '@/lib/site-config';
+import { BrandMark } from './brand-mark';
 
 interface SiteHeaderProps {
   locale: Locale;
@@ -43,12 +44,7 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
           href={`/${locale}`}
           className="inline-flex items-center gap-2 text-base font-semibold tracking-tight text-foreground"
         >
-          <span
-            aria-hidden="true"
-            className="flex size-7 items-center justify-center rounded-md bg-primary text-primary-foreground"
-          >
-            <span className="text-sm font-bold">R</span>
-          </span>
+          <BrandMark className="size-7" />
           {siteConfig.name}
         </a>
 
@@ -98,12 +94,7 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
             <SheetContent side="right" className="w-72 p-0">
               <SheetHeader className="border-b border-border px-6 py-5">
                 <SheetTitle className="inline-flex items-center gap-2 text-base font-semibold tracking-tight text-foreground">
-                  <span
-                    aria-hidden="true"
-                    className="flex size-7 items-center justify-center rounded-md bg-primary text-primary-foreground"
-                  >
-                    <span className="text-sm font-bold">R</span>
-                  </span>
+                  <BrandMark className="size-7" />
                   {siteConfig.name}
                 </SheetTitle>
               </SheetHeader>

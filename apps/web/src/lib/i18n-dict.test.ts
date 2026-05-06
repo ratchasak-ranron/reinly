@@ -24,8 +24,8 @@ describe('makeT (en)', () => {
   });
 
   it('drops the placeholder when the matching var is missing', () => {
-    expect(t('footer.copyright', {})).toBe('©  Reinly. All rights reserved.');
-    expect(t('footer.copyright', { other: 'x' })).toBe('©  Reinly. All rights reserved.');
+    expect(t('footer.copyright', {})).toBe('©  reinly. All rights reserved.');
+    expect(t('footer.copyright', { other: 'x' })).toBe('©  reinly. All rights reserved.');
   });
 });
 

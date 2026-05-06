@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "Reinly"
+    "name": "reinly"
   },
   "nav": {
     "home": "Home",
@@ -28,7 +28,7 @@
       "noLockIn": "No lock-in"
     },
     "problemSolution": {
-      "eyebrow": "Why Reinly",
+      "eyebrow": "Why reinly",
       "heading": "Built for small clinics, not scaled-down enterprise.",
       "problemHeading": "What clinic owners told us",
       "problems": [
@@ -37,7 +37,7 @@
         "Multi-branch reporting takes hours every Monday.",
         "PDPA compliance is a binder, not a workflow."
       ],
-      "solutionHeading": "What Reinly does",
+      "solutionHeading": "What reinly does",
       "solutions": [
         "One patient record across appointments, courses, receipts, and consents.",
         "Course balance tracked per session, with audit trail.",
@@ -88,7 +88,7 @@
       "items": [
         {
           "id": "who",
-          "q": "Who is Reinly for?",
+          "q": "Who is reinly for?",
           "a": "Solo to mid-size clinics in Thailand running 1–4 branches. Built for aesthetic clinics first; not for hospitals."
         },
         {
@@ -109,7 +109,7 @@
         {
           "id": "training",
           "q": "Does it need staff training?",
-          "a": "Day-one onboarding is 30 minutes. We pair every pilot clinic with a Reinly operator for the first two weeks."
+          "a": "Day-one onboarding is 30 minutes. We pair every pilot clinic with a reinly operator for the first two weeks."
         },
         {
           "id": "lock",
@@ -220,14 +220,14 @@
     "intro": {
       "eyebrow": "Features",
       "heading": "Built around the daily routine.",
-      "sub": "Five workflows your clinic does every day. Reinly makes them faster, safer, and quieter."
+      "sub": "Five workflows your clinic does every day. reinly makes them faster, safer, and quieter."
     },
     "sections": [
       {
         "id": "course",
         "eyebrow": "Course tracking",
         "heading": "Sessions tracked, not guessed.",
-        "body": "Sell a course; the balance lives in Reinly. Every redemption is one tap, one audit-log line, one less argument with the front desk."
+        "body": "Sell a course; the balance lives in reinly. Every redemption is one tap, one audit-log line, one less argument with the front desk."
       },
       {
         "id": "branches",
@@ -239,7 +239,7 @@
         "id": "line",
         "eyebrow": "LINE-native",
         "heading": "Recalls in the language your patients reply to.",
-        "body": "Reinly drafts the message from real visit history. You review, copy, paste into LINE OA. Direct-send via the LINE API ships in H2."
+        "body": "reinly drafts the message from real visit history. You review, copy, paste into LINE OA. Direct-send via the LINE API ships in H2."
       },
       {
         "id": "ai",
@@ -259,12 +259,12 @@
     "intro": {
       "eyebrow": "About",
       "heading": "Built by an operator. For operators.",
-      "sub": "Reinly is a small team that has run aesthetic clinics — not a generic SaaS shop pivoting in."
+      "sub": "reinly is a small team that has run aesthetic clinics — not a generic SaaS shop pivoting in."
     },
     "founder": {
       "name": "Ratchasak",
       "role": "Founder",
-      "bio": "Ten years building software for healthcare and beauty businesses in Thailand. Reinly started after watching three clinics burn weekends on spreadsheets that shipped no value to patients."
+      "bio": "Ten years building software for healthcare and beauty businesses in Thailand. reinly started after watching three clinics burn weekends on spreadsheets that shipped no value to patients."
     },
     "missionEyebrow": "Mission",
     "mission": "Less of the work that does not matter. More of the care that does.",
@@ -291,18 +291,18 @@
   "finalCta": {
     "eyebrow": "Ready",
     "heading": "Get the first 30 days free.",
-    "body": "Five pilot slots through Q3 2026. We pair you with a Reinly operator for the first two weeks.",
+    "body": "Five pilot slots through Q3 2026. We pair you with a reinly operator for the first two weeks.",
     "cta": "Join the pilot — free 30 days"
   },
   "footer": {
-    "copyright": "© {{year}} Reinly. All rights reserved.",
+    "copyright": "© {{year}} reinly. All rights reserved.",
     "privacy": "Privacy",
     "terms": "Terms",
     "legalNav": "Legal links"
   },
   "meta": {
     "home": {
-      "title": "Reinly",
+      "title": "reinly",
       "description": "Clinic software, distilled — patient records, courses, billing, multi-branch reports. Fair price, no contracts."
     },
     "pricing": {
@@ -315,23 +315,23 @@
     },
     "about": {
       "title": "About",
-      "description": "Reinly is built by an operator who has run aesthetic clinics in Thailand. Vertical-focused. Thai-first."
+      "description": "reinly is built by an operator who has run aesthetic clinics in Thailand. Vertical-focused. Thai-first."
     },
     "pilot": {
       "title": "Join the pilot",
-      "description": "Apply for the Reinly pilot — first 30 days free for the Q3 2026 cohort."
+      "description": "Apply for the reinly pilot — first 30 days free for the Q3 2026 cohort."
     },
     "privacy": {
       "title": "Privacy",
-      "description": "Reinly privacy policy — DRAFT pending legal review."
+      "description": "reinly privacy policy — DRAFT pending legal review."
     },
     "terms": {
       "title": "Terms",
-      "description": "Reinly terms of service — DRAFT pending legal review."
+      "description": "reinly terms of service — DRAFT pending legal review."
     },
     "blog": {
       "title": "Notes from the operator",
-      "description": "Updates from the Reinly team — what we're building and why."
+      "description": "Updates from the reinly team — what we're building and why."
     },
     "notFound": {
       "title": "404 — not found",
@@ -387,7 +387,7 @@
       {
         "id": "scope",
         "heading": "Scope",
-        "body": "This policy describes how Reinly processes personal data submitted via the marketing site (getreinly.com), the pilot signup form, and the pilot product. It applies to clinic owners, clinic staff, and patients whose data is entered into Reinly by clinic staff."
+        "body": "This policy describes how reinly processes personal data submitted via the marketing site (getreinly.com), the pilot signup form, and the pilot product. It applies to clinic owners, clinic staff, and patients whose data is entered into reinly by clinic staff."
       },
       {
         "id": "data",
@@ -434,27 +434,27 @@
       {
         "id": "acceptance",
         "heading": "Acceptance",
-        "body": "By accessing getreinly.com or signing up for the Reinly pilot, you agree to these Terms. If you do not agree, do not use the service."
+        "body": "By accessing getreinly.com or signing up for the reinly pilot, you agree to these Terms. If you do not agree, do not use the service."
       },
       {
         "id": "pilot",
         "heading": "Pilot definition",
-        "body": "The Reinly pilot is a 30-day free trial of the Clinic tier offered to up to five clinics in the Q3 2026 cohort. After 30 days you may continue on the Clinic tier (paid) or cancel at no cost. Pilot participants receive dedicated onboarding from a Reinly operator."
+        "body": "The reinly pilot is a 30-day free trial of the Clinic tier offered to up to five clinics in the Q3 2026 cohort. After 30 days you may continue on the Clinic tier (paid) or cancel at no cost. Pilot participants receive dedicated onboarding from a reinly operator."
       },
       {
         "id": "use",
         "heading": "Use restrictions",
-        "body": "You may not: (a) use Reinly to process data of patients who have not given consent under PDPA; (b) reverse-engineer the service; (c) resell or sublicense access; (d) use Reinly for any purpose other than aesthetic clinic operations."
+        "body": "You may not: (a) use reinly to process data of patients who have not given consent under PDPA; (b) reverse-engineer the service; (c) resell or sublicense access; (d) use reinly for any purpose other than aesthetic clinic operations."
       },
       {
         "id": "ip",
         "heading": "Intellectual property",
-        "body": "You retain all rights to data you enter into Reinly. We retain all rights to the Reinly software, brand, and product design. Trademarks (Reinly name, logo) may not be used without written permission."
+        "body": "You retain all rights to data you enter into reinly. We retain all rights to the reinly software, brand, and product design. Trademarks (reinly name, logo) may not be used without written permission."
       },
       {
         "id": "liability",
         "heading": "Limitation of liability",
-        "body": "Reinly is provided as-is during the pilot. We are not liable for indirect or consequential damages. AI-assisted output (visit summaries, recall drafts) is draft-only and must be reviewed by clinic staff before patient contact; we are not liable for patient outcomes resulting from unreviewed AI output."
+        "body": "reinly is provided as-is during the pilot. We are not liable for indirect or consequential damages. AI-assisted output (visit summaries, recall drafts) is draft-only and must be reviewed by clinic staff before patient contact; we are not liable for patient outcomes resulting from unreviewed AI output."
       },
       {
         "id": "termination",
@@ -467,7 +467,7 @@
     "intro": {
       "eyebrow": "Notes",
       "heading": "Notes from the operator.",
-      "sub": "Stories, decisions, and updates from the Reinly team. Light frequency — we ship, then we write."
+      "sub": "Stories, decisions, and updates from the reinly team. Light frequency — we ship, then we write."
     },
     "empty": "First post lands when the pilot does. Check back soon — or follow along via the LINE OA at @reinly."
   },
