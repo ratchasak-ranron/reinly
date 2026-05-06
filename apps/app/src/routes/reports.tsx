@@ -6,23 +6,33 @@ import {
   Activity,
   AlertTriangle,
   Coins,
+  Lightbulb,
   Package,
+  PiggyBank,
+  Receipt as ReceiptIcon,
   Stethoscope,
+  TrendingDown,
   TrendingUp,
   Users,
+  Wallet,
 } from 'lucide-react';
 import type { ReportDimension } from '@reinly/api-client';
 import type {
   CommissionStatus,
   DoctorCommissionSummary,
+  Expense,
+  ExpenseCategory,
   InventoryItem,
 } from '@reinly/domain';
+import { expensesInRange, summarizeExpenses } from '@reinly/domain';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Select } from '@/components/ui/select';
+import { SegmentedTabs } from '@/components/ui/segmented-tabs';
 import { FormError, FormStatus } from '@/components/ui/form-feedback';
 import { Pagination, usePagination } from '@/components/ui/pagination';
 import { useDevToolbar } from '@/store/dev-toolbar';
+import { useExpenses } from '@/store/expense-store';
 import {
   monthRangeToDates,
   useDimensionReport,
@@ -35,6 +45,8 @@ import { PageHeader } from '@/components/page-header';
 import { TenantGate } from '@/components/tenant-gate';
 import { cn } from '@/lib/utils';
 
+type ReportTab = 'overview' | 'revenue-structure';
+
 export function ReportsPage() {
   const { t } = useTranslation();
   const locale = useLocale();
@@ -43,6 +55,7 @@ export function ReportsPage() {
   const [year, setYear] = useState(now.getFullYear());
   const [month, setMonth] = useState(now.getMonth() + 1);
   const [dimension, setDimension] = useState<ReportDimension>('doctor');
+  const [tab, setTab] = useState<ReportTab>('overview');
 
   const range = useMemo(() => {
     const dates = monthRangeToDates(year, month);
@@ -51,6 +64,14 @@ export function ReportsPage() {
 
   const report = useMonthlyReport(range);
   const dimensionReport = useDimensionReport(dimension, range);
+  const expenses = useExpenses();
+
+  const monthExpenses = useMemo(() => {
+    const start = new Date(year, month - 1, 1).toISOString();
+    const end = new Date(year, month, 1).toISOString();
+    return expensesInRange(expenses, start, end);
+  }, [expenses, year, month]);
+
   const monthOptions = useMemo(
     () => monthsForLocale(locale).map((m, idx) => ({ value: String(idx + 1), label: m })),
     [locale],
@@ -85,6 +106,17 @@ export function ReportsPage() {
           }
         />
 
+        <SegmentedTabs<ReportTab>
+          ariaLabel={t('report.tabs.label')}
+          variant="underline"
+          value={tab}
+          onChange={setTab}
+          options={[
+            { value: 'overview', label: t('report.tabs.overview') },
+            { value: 'revenue-structure', label: t('report.tabs.revenueStructure') },
+          ]}
+        />
+
         {report.isError ? (
           <FormError className="rounded-md border border-destructive/40 bg-destructive/5 p-3">
             {`${t('common.error')}: ${report.error.message}`}
@@ -97,15 +129,29 @@ export function ReportsPage() {
           </FormStatus>
         ) : null}
 
+        {tab === 'revenue-structure' ? (
+          <RevenueStructureTab
+            revenue={report.data?.totalRevenue ?? 0}
+            visitCount={report.data?.visitCount ?? 0}
+            commissionTotal={
+              report.data?.commissionSummary.reduce((sum, c) => sum + c.totalAmount, 0) ?? 0
+            }
+            expenses={monthExpenses}
+            isLoading={report.isLoading}
+            locale={locale}
+            t={t}
+          />
+        ) : null}
+
         {/* KPI strip — 4 tiles for the selected month */}
-        {report.isLoading ? (
+        {tab === 'overview' && report.isLoading ? (
           <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
             <Skeleton className="h-24" />
             <Skeleton className="h-24" />
             <Skeleton className="h-24" />
             <Skeleton className="h-24" />
           </div>
-        ) : report.data ? (
+        ) : tab === 'overview' && report.data ? (
           <section
             aria-label={t('report.title')}
             className="grid grid-cols-2 gap-2 lg:grid-cols-4"
@@ -140,7 +186,7 @@ export function ReportsPage() {
         ) : null}
 
         {/* Breakdown — full-width with dimension pill toggle and bar list */}
-        {report.data ? (
+        {tab === 'overview' && report.data ? (
           <Card className="overflow-hidden p-0">
             <CardHeader className="flex flex-col gap-3 border-b border-border p-5 sm:flex-row sm:items-center sm:justify-between">
               <CardTitle className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
@@ -171,7 +217,7 @@ export function ReportsPage() {
         ) : null}
 
         {/* Two-col supporting cards: commissions + low stock */}
-        {report.data ? (
+        {tab === 'overview' && report.data ? (
           <div className="grid gap-6 lg:grid-cols-2">
             <Card className="overflow-hidden p-0">
               <CardHeader className="flex flex-row items-center justify-between gap-2 border-b border-border p-5">
@@ -523,4 +569,510 @@ function LowStockList({ items }: { items: InventoryItem[] }) {
       ) : null}
     </div>
   );
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Revenue Structure tab                                                     */
+/* -------------------------------------------------------------------------- */
+
+const COST_ACCENT: Record<ExpenseCategory, { bg: string; bar: string; ink: string }> = {
+  rent: { bg: 'bg-indigo-soft', bar: 'bg-indigo', ink: 'text-indigo-ink' },
+  doctor_fee: { bg: 'bg-sky-soft', bar: 'bg-sky', ink: 'text-sky-ink' },
+  salary: { bg: 'bg-emerald-soft', bar: 'bg-emerald', ink: 'text-emerald-ink' },
+  utilities: { bg: 'bg-violet-soft', bar: 'bg-violet', ink: 'text-violet-ink' },
+  supplies: { bg: 'bg-rose-soft', bar: 'bg-rose', ink: 'text-rose-ink' },
+  marketing: { bg: 'bg-amber-soft', bar: 'bg-amber', ink: 'text-amber-ink' },
+  equipment: { bg: 'bg-indigo-soft', bar: 'bg-indigo', ink: 'text-indigo-ink' },
+  tax: { bg: 'bg-rose-soft', bar: 'bg-rose', ink: 'text-rose-ink' },
+  other: { bg: 'bg-muted', bar: 'bg-foreground', ink: 'text-foreground' },
+};
+
+const RENT_BENCHMARK = 0.3;
+const DOCTOR_BENCHMARK = 0.4;
+const HEALTHY_MARGIN = 0.2;
+
+interface RevenueStructureTabProps {
+  revenue: number;
+  visitCount: number;
+  commissionTotal: number;
+  expenses: ReadonlyArray<Expense>;
+  isLoading: boolean;
+  locale: 'en' | 'th';
+  t: TFunction;
+}
+
+function RevenueStructureTab({
+  revenue,
+  visitCount,
+  commissionTotal,
+  expenses,
+  isLoading,
+  locale,
+  t,
+}: RevenueStructureTabProps) {
+  const summary = useMemo(() => summarizeExpenses(expenses), [expenses]);
+  const totalExpenses = summary.total;
+  const grossProfit = revenue - totalExpenses;
+  const margin = revenue > 0 ? grossProfit / revenue : 0;
+  const avgTicket = visitCount > 0 ? revenue / visitCount : 0;
+
+  const costMix = useMemo(() => {
+    return (Object.entries(summary.byCategory) as Array<[ExpenseCategory, number]>)
+      .filter(([, total]) => total > 0)
+      .sort((a, b) => b[1] - a[1]);
+  }, [summary]);
+  const topCost = costMix[0]?.[0];
+  const topCostShare = revenue > 0 && costMix[0] ? costMix[0][1] / revenue : 0;
+
+  const rentTotal = summary.byCategory.rent;
+  const rentShare = revenue > 0 ? rentTotal / revenue : 0;
+  const doctorShare = revenue > 0 ? commissionTotal / revenue : 0;
+
+  const insights = useMemo(() => {
+    const items: Array<{ tone: 'good' | 'warn' | 'bad'; title: string; body: string }> = [];
+
+    if (revenue === 0) {
+      items.push({
+        tone: 'warn',
+        title: t('report.revenueStructure.insights.noRevenueTitle'),
+        body: t('report.revenueStructure.insights.noRevenueBody'),
+      });
+    }
+    if (revenue > 0) {
+      if (margin < 0) {
+        items.push({
+          tone: 'bad',
+          title: t('report.revenueStructure.insights.negativeMarginTitle'),
+          body: t('report.revenueStructure.insights.negativeMarginBody', {
+            value: formatPercent(margin, locale),
+          }),
+        });
+      } else if (margin < HEALTHY_MARGIN) {
+        items.push({
+          tone: 'warn',
+          title: t('report.revenueStructure.insights.thinMarginTitle'),
+          body: t('report.revenueStructure.insights.thinMarginBody', {
+            value: formatPercent(margin, locale),
+            target: formatPercent(HEALTHY_MARGIN, locale),
+          }),
+        });
+      } else {
+        items.push({
+          tone: 'good',
+          title: t('report.revenueStructure.insights.healthyMarginTitle'),
+          body: t('report.revenueStructure.insights.healthyMarginBody', {
+            value: formatPercent(margin, locale),
+          }),
+        });
+      }
+    }
+
+    if (rentShare > RENT_BENCHMARK) {
+      items.push({
+        tone: 'warn',
+        title: t('report.revenueStructure.insights.rentHighTitle'),
+        body: t('report.revenueStructure.insights.rentHighBody', {
+          value: formatPercent(rentShare, locale),
+          benchmark: formatPercent(RENT_BENCHMARK, locale),
+        }),
+      });
+    }
+
+    if (doctorShare > DOCTOR_BENCHMARK) {
+      items.push({
+        tone: 'warn',
+        title: t('report.revenueStructure.insights.doctorHighTitle'),
+        body: t('report.revenueStructure.insights.doctorHighBody', {
+          value: formatPercent(doctorShare, locale),
+          benchmark: formatPercent(DOCTOR_BENCHMARK, locale),
+        }),
+      });
+    }
+
+    if (topCost && topCostShare > 0) {
+      items.push({
+        tone: 'good',
+        title: t('report.revenueStructure.insights.topCostTitle', {
+          category: t(`expense.category.${topCost}`),
+        }),
+        body: t('report.revenueStructure.insights.topCostBody', {
+          value: formatPercent(topCostShare, locale),
+        }),
+      });
+    }
+
+    if (avgTicket > 0) {
+      items.push({
+        tone: 'good',
+        title: t('report.revenueStructure.insights.avgTicketTitle'),
+        body: t('report.revenueStructure.insights.avgTicketBody', {
+          value: formatCurrency(avgTicket, locale),
+          count: visitCount,
+        }),
+      });
+    }
+
+    return items;
+  }, [
+    revenue,
+    margin,
+    rentShare,
+    doctorShare,
+    topCost,
+    topCostShare,
+    avgTicket,
+    visitCount,
+    locale,
+    t,
+  ]);
+
+  if (isLoading) {
+    return (
+      <div className="grid gap-4 lg:grid-cols-4">
+        <Skeleton className="h-24" />
+        <Skeleton className="h-24" />
+        <Skeleton className="h-24" />
+        <Skeleton className="h-24" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      <section
+        aria-label={t('report.revenueStructure.title')}
+        className="grid grid-cols-2 gap-2 lg:grid-cols-4"
+      >
+        <KpiCard
+          label={t('report.revenueStructure.kpi.revenue')}
+          value={formatCurrency(revenue, locale)}
+          hint={`${formatNumber(visitCount, locale)} ${t('report.receipts')}`}
+          icon={TrendingUp}
+          accent="indigo"
+        />
+        <KpiCard
+          label={t('report.revenueStructure.kpi.expenses')}
+          value={formatCurrency(totalExpenses, locale)}
+          hint={t('report.revenueStructure.kpi.expensesHint', {
+            count: expenses.length,
+          })}
+          icon={Wallet}
+          accent="amber"
+        />
+        <KpiCard
+          label={t('report.revenueStructure.kpi.netProfit')}
+          value={formatCurrency(grossProfit, locale)}
+          hint={
+            grossProfit >= 0
+              ? t('report.revenueStructure.kpi.profitHint')
+              : t('report.revenueStructure.kpi.lossHint')
+          }
+          icon={grossProfit >= 0 ? PiggyBank : TrendingDown}
+          accent={grossProfit >= 0 ? 'violet' : 'amber'}
+        />
+        <KpiCard
+          label={t('report.revenueStructure.kpi.margin')}
+          value={formatPercent(margin, locale)}
+          hint={t('report.revenueStructure.kpi.marginHint', {
+            target: formatPercent(HEALTHY_MARGIN, locale),
+          })}
+          icon={ReceiptIcon}
+          accent={margin >= HEALTHY_MARGIN ? 'sky' : margin >= 0 ? 'amber' : 'zinc'}
+        />
+      </section>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <CostMixCard
+          rows={costMix}
+          totalExpenses={totalExpenses}
+          revenue={revenue}
+          locale={locale}
+          t={t}
+        />
+        <PnlCard
+          revenue={revenue}
+          totalExpenses={totalExpenses}
+          grossProfit={grossProfit}
+          rentShare={rentShare}
+          doctorShare={doctorShare}
+          locale={locale}
+          t={t}
+        />
+      </div>
+
+      <Card className="overflow-hidden p-0">
+        <CardHeader className="flex flex-row items-center justify-between gap-2 border-b border-border p-5">
+          <CardTitle className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+            <Lightbulb className="size-4" aria-hidden="true" />
+            {t('report.revenueStructure.insights.title')}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
+          {insights.length === 0 ? (
+            <p className="px-5 py-12 text-center text-sm text-muted-foreground">
+              {t('report.revenueStructure.insights.empty')}
+            </p>
+          ) : (
+            <ul role="list" className="divide-y divide-border">
+              {insights.map((insight, idx) => (
+                <li key={idx} className="flex gap-3 px-5 py-4">
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      'mt-1 flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-bold',
+                      insight.tone === 'good'
+                        ? 'bg-emerald-soft text-emerald-ink'
+                        : insight.tone === 'warn'
+                          ? 'bg-amber-soft text-amber-ink'
+                          : 'bg-rose-soft text-rose-ink',
+                    )}
+                  >
+                    {insight.tone === 'good' ? '↑' : insight.tone === 'warn' ? '!' : '↓'}
+                  </span>
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-foreground">
+                      {insight.title}
+                    </p>
+                    <p className="mt-0.5 text-sm text-muted-foreground">
+                      {insight.body}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+function CostMixCard({
+  rows,
+  totalExpenses,
+  revenue,
+  locale,
+  t,
+}: {
+  rows: Array<[ExpenseCategory, number]>;
+  totalExpenses: number;
+  revenue: number;
+  locale: 'en' | 'th';
+  t: TFunction;
+}) {
+  return (
+    <Card className="overflow-hidden p-0">
+      <CardHeader className="flex flex-row items-center justify-between gap-2 border-b border-border p-5">
+        <CardTitle className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+          <Wallet className="size-4" aria-hidden="true" />
+          {t('report.revenueStructure.costMix.title')}
+        </CardTitle>
+        <span className="text-xs text-muted-foreground tabular-nums">
+          {formatCurrency(totalExpenses, locale)}
+        </span>
+      </CardHeader>
+      <CardContent className="p-0">
+        {rows.length === 0 ? (
+          <p className="px-5 py-12 text-center text-sm text-muted-foreground">
+            {t('report.revenueStructure.costMix.empty')}
+          </p>
+        ) : (
+          <ul role="list" className="divide-y divide-border">
+            {rows.map(([category, amount]) => {
+              const accent = COST_ACCENT[category];
+              const sharePct = totalExpenses > 0 ? (amount / totalExpenses) * 100 : 0;
+              const revenuePct = revenue > 0 ? (amount / revenue) * 100 : 0;
+              return (
+                <li key={category} className="px-5 py-4">
+                  <div className="flex items-baseline justify-between gap-3">
+                    <span className={cn('text-sm font-medium', accent.ink)}>
+                      {t(`expense.category.${category}`)}
+                    </span>
+                    <span className="font-mono text-sm font-semibold tabular-nums text-foreground">
+                      {formatCurrency(amount, locale)}
+                    </span>
+                  </div>
+                  <div className="mt-2 flex items-center gap-3">
+                    <div
+                      role="progressbar"
+                      aria-valuenow={Math.round(sharePct)}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                      aria-label={t(`expense.category.${category}`)}
+                      className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted"
+                    >
+                      <span
+                        aria-hidden="true"
+                        className={cn(
+                          'block h-full transition-[width] duration-200',
+                          accent.bar,
+                        )}
+                        style={{ width: `${Math.max(2, Math.min(100, sharePct))}%` }}
+                      />
+                    </div>
+                    <span className="font-mono text-[11px] text-muted-foreground tabular-nums">
+                      {sharePct.toFixed(1)}%
+                    </span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-muted-foreground">
+                    {t('report.revenueStructure.costMix.shareOfRevenue', {
+                      value: formatPercent(revenuePct / 100, locale),
+                    })}
+                  </p>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+function PnlCard({
+  revenue,
+  totalExpenses,
+  grossProfit,
+  rentShare,
+  doctorShare,
+  locale,
+  t,
+}: {
+  revenue: number;
+  totalExpenses: number;
+  grossProfit: number;
+  rentShare: number;
+  doctorShare: number;
+  locale: 'en' | 'th';
+  t: TFunction;
+}) {
+  const max = Math.max(revenue, totalExpenses, 1);
+  const revenueWidth = (revenue / max) * 100;
+  const expensesWidth = (totalExpenses / max) * 100;
+  return (
+    <Card className="overflow-hidden p-0">
+      <CardHeader className="border-b border-border p-5">
+        <CardTitle className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+          <PiggyBank className="size-4" aria-hidden="true" />
+          {t('report.revenueStructure.pnl.title')}
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-5 p-5">
+        <PnlRow
+          label={t('report.revenueStructure.pnl.revenue')}
+          value={formatCurrency(revenue, locale)}
+          width={revenueWidth}
+          tone="positive"
+        />
+        <PnlRow
+          label={t('report.revenueStructure.pnl.expenses')}
+          value={formatCurrency(totalExpenses, locale)}
+          width={expensesWidth}
+          tone="negative"
+        />
+        <div
+          className={cn(
+            'flex items-baseline justify-between rounded-lg border border-border p-3',
+            grossProfit >= 0 ? 'bg-emerald-soft/50' : 'bg-rose-soft/50',
+          )}
+        >
+          <span className="text-sm font-semibold text-foreground">
+            {t('report.revenueStructure.pnl.netProfit')}
+          </span>
+          <span
+            className={cn(
+              'font-mono text-lg font-semibold tabular-nums',
+              grossProfit >= 0 ? 'text-emerald-ink' : 'text-rose-ink',
+            )}
+          >
+            {formatCurrency(grossProfit, locale)}
+          </span>
+        </div>
+        <div className="space-y-2 border-t border-border pt-4">
+          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            {t('report.revenueStructure.pnl.benchmarks')}
+          </p>
+          <BenchmarkRow
+            label={t('report.revenueStructure.pnl.rentShare')}
+            actual={rentShare}
+            target={RENT_BENCHMARK}
+            locale={locale}
+          />
+          <BenchmarkRow
+            label={t('report.revenueStructure.pnl.doctorShare')}
+            actual={doctorShare}
+            target={DOCTOR_BENCHMARK}
+            locale={locale}
+          />
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function PnlRow({
+  label,
+  value,
+  width,
+  tone,
+}: {
+  label: string;
+  value: string;
+  width: number;
+  tone: 'positive' | 'negative';
+}) {
+  const fill = tone === 'positive' ? 'bg-emerald' : 'bg-rose';
+  return (
+    <div>
+      <div className="flex items-baseline justify-between">
+        <span className="text-sm font-medium text-foreground">{label}</span>
+        <span className="font-mono text-sm font-semibold tabular-nums text-foreground">
+          {value}
+        </span>
+      </div>
+      <div className="mt-2 h-2 overflow-hidden rounded-full bg-muted">
+        <span
+          aria-hidden="true"
+          className={cn('block h-full transition-[width] duration-200', fill)}
+          style={{ width: `${Math.max(2, Math.min(100, width))}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function BenchmarkRow({
+  label,
+  actual,
+  target,
+  locale,
+}: {
+  label: string;
+  actual: number;
+  target: number;
+  locale: 'en' | 'th';
+}) {
+  const overTarget = actual > target;
+  return (
+    <div className="flex items-center justify-between text-xs">
+      <span className="text-muted-foreground">{label}</span>
+      <div className="flex items-center gap-2 tabular-nums">
+        <span
+          className={cn(
+            'font-mono font-semibold',
+            overTarget ? 'text-amber-ink' : 'text-emerald-ink',
+          )}
+        >
+          {formatPercent(actual, locale)}
+        </span>
+        <span className="text-muted-foreground">/</span>
+        <span className="text-muted-foreground">{formatPercent(target, locale)}</span>
+      </div>
+    </div>
+  );
+}
+
+function formatPercent(ratio: number, locale: 'en' | 'th'): string {
+  const pct = Math.round(ratio * 1000) / 10;
+  return `${formatNumber(pct, locale)}%`;
 }

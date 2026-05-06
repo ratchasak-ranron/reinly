@@ -350,6 +350,58 @@
       "doctor": "Doctor",
       "service": "Service",
       "branch": "Branch"
+    },
+    "tabs": {
+      "label": "Reports tabs",
+      "overview": "Overview",
+      "revenueStructure": "Revenue structure"
+    },
+    "revenueStructure": {
+      "title": "Revenue structure",
+      "kpi": {
+        "revenue": "Revenue",
+        "expenses": "Expenses",
+        "expensesHint": "{{count}} entries",
+        "netProfit": "Net profit",
+        "profitHint": "After tracked expenses",
+        "lossHint": "Operating at a loss",
+        "margin": "Margin",
+        "marginHint": "Target ≥ {{target}}"
+      },
+      "costMix": {
+        "title": "Cost mix",
+        "empty": "No expenses logged for this month yet.",
+        "shareOfRevenue": "{{value}} of revenue"
+      },
+      "pnl": {
+        "title": "P&L snapshot",
+        "revenue": "Revenue",
+        "expenses": "Expenses",
+        "netProfit": "Net profit",
+        "benchmarks": "Benchmarks",
+        "rentShare": "Rent vs revenue",
+        "doctorShare": "Doctor commission vs revenue"
+      },
+      "insights": {
+        "title": "Strategic insights",
+        "empty": "Add expenses and receipts to surface insights.",
+        "noRevenueTitle": "No revenue this month",
+        "noRevenueBody": "Capture receipts to enable margin analysis.",
+        "negativeMarginTitle": "Margin is negative",
+        "negativeMarginBody": "Margin {{value}} — expenses are outpacing revenue. Pause discretionary spend or push promotions to lift sales.",
+        "thinMarginTitle": "Margin is below target",
+        "thinMarginBody": "Margin {{value}} (target {{target}}). Look at top cost drivers and high-traffic services to widen the gap.",
+        "healthyMarginTitle": "Margin is healthy",
+        "healthyMarginBody": "Margin {{value}}. Reinvest into marketing or service capacity to compound the lead.",
+        "rentHighTitle": "Rent share is high",
+        "rentHighBody": "Rent is {{value}} of revenue (benchmark ≤ {{benchmark}}). Increase utilization or renegotiate the lease.",
+        "doctorHighTitle": "Doctor commission is high",
+        "doctorHighBody": "Commission is {{value}} of revenue (benchmark ≤ {{benchmark}}). Mix in higher-margin services or revisit the rate.",
+        "topCostTitle": "Biggest cost: {{category}}",
+        "topCostBody": "{{value}} of revenue. Watch for cheaper substitutes or volume rebates.",
+        "avgTicketTitle": "Average ticket",
+        "avgTicketBody": "{{value}} across {{count}} receipts. Bundle add-ons or premium tiers to lift this."
+      }
     }
   },
   "branch": {
