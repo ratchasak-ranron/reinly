@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "Reinly",
+    "name": "reinly",
     "tagline": "Clinic software, distilled."
   },
   "nav": {
@@ -664,7 +664,7 @@
     "signIn": "Sign in",
     "signOut": "Sign out",
     "realAuthHint": "Real authentication ships in a later phase.",
-    "footerNote": "© Reinly · Demo environment"
+    "footerNote": "© reinly · Demo environment"
   },
   "pagination": {
     "label": "Pagination",
