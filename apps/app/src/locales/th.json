@@ -10,6 +10,9 @@
     "appointments": "นัดหมาย",
     "courses": "คอร์ส",
     "inventory": "คลังสินค้า",
+    "products": "สินค้าและบริการ",
+    "promotions": "โปรโมชัน",
+    "doctors": "แพทย์",
     "branches": "สาขา",
     "reports": "รายงาน",
     "audit": "Audit Log",
@@ -591,5 +594,116 @@
     "goToPage": "ไปหน้า {{page}}",
     "showing": "แสดง {{from}}–{{to}} จาก {{total}}",
     "perPage": "ต่อหน้า"
+  },
+  "product": {
+    "title": "สินค้าและบริการ",
+    "newProduct": "เพิ่มสินค้า",
+    "editProduct": "แก้ไขสินค้า",
+    "newProductDescription": "รายการในแคตตาล็อก ทั้งบริการ วัสดุสิ้นเปลือง สมาชิก หรือชุดแพ็กเกจ",
+    "deleteTitle": "ลบสินค้านี้หรือไม่?",
+    "deleteDescription": "ลบสินค้าออกจากแคตตาล็อก ใบเสร็จเดิมที่อ้างอิงสินค้านี้จะไม่ถูกลบ",
+    "searchPlaceholder": "ค้นหาสินค้า…",
+    "description": "รายละเอียด",
+    "bundleCount": "ชุด {{count}} รายการ",
+    "empty": {
+      "list": "ยังไม่มีสินค้า",
+      "filter": "ไม่มีสินค้าตรงเงื่อนไข"
+    },
+    "errors": {
+      "tenantRequired": "เลือกคลินิกก่อน",
+      "required": "ต้องกรอกรหัสและชื่อ",
+      "priceInvalid": "ราคาต้องไม่ติดลบ"
+    },
+    "col": {
+      "sku": "รหัส",
+      "name": "ชื่อ",
+      "category": "หมวด",
+      "price": "ราคา",
+      "bundle": "ชุดสินค้า"
+    },
+    "category": {
+      "service": "บริการ",
+      "consumable": "วัสดุสิ้นเปลือง",
+      "membership": "สมาชิก",
+      "aesthetic": "ความงาม",
+      "dental": "ทันตกรรม"
+    },
+    "bundle": {
+      "title": "รายการในชุด",
+      "description": "รวมสินค้าหลายรายการ (ที่ไม่ใช่ชุด) เป็น SKU เดียวพร้อมราคารวม",
+      "addItem": "เพิ่มรายการ",
+      "empty": "ยังไม่มีรายการ — เว้นว่างไว้หากเป็นสินค้าเดี่ยว"
+    }
+  },
+  "promotion": {
+    "title": "โปรโมชัน",
+    "newPromotion": "เพิ่มโปรโมชัน",
+    "editPromotion": "แก้ไขโปรโมชัน",
+    "newPromotionDescription": "รหัสส่วนลดที่ใช้กับราคาสินค้าหรือชุดแพ็กเกจ",
+    "deleteTitle": "ลบโปรโมชันนี้หรือไม่?",
+    "deleteDescription": "ลบรหัสส่วนลดออกจากแคตตาล็อก ใบเสร็จที่ใช้รหัสนี้แล้วจะคงอยู่",
+    "empty": "ยังไม่มีโปรโมชัน",
+    "alwaysOn": "ใช้งานตลอด",
+    "statusActive": "ใช้งาน",
+    "statusInactive": "ปิดใช้",
+    "activeLabel": "เปิดใช้งาน",
+    "specificHelp": "เลือกสินค้าที่จะใช้โปรโมชันนี้",
+    "errors": {
+      "tenantRequired": "เลือกคลินิกก่อน",
+      "required": "ต้องกรอกรหัสและชื่อ",
+      "codeFormat": "รหัสต้องเป็น A–Z, 0–9, _, - ความยาว 2–40 ตัวอักษร",
+      "valueInvalid": "ส่วนลดไม่ถูกต้อง",
+      "specificEmpty": "เลือกสินค้าอย่างน้อย 1 รายการ"
+    },
+    "col": {
+      "code": "รหัส",
+      "name": "ชื่อ",
+      "type": "ประเภท",
+      "discount": "ส่วนลด",
+      "scope": "ขอบเขต",
+      "window": "ช่วงเวลา",
+      "startsAt": "เริ่ม",
+      "endsAt": "สิ้นสุด",
+      "status": "สถานะ"
+    },
+    "type": {
+      "percent": "เปอร์เซ็นต์",
+      "amount": "จำนวนเงินคงที่"
+    },
+    "scope": {
+      "allProductsLabel": "ทุกสินค้า",
+      "specificLabel": "สินค้าที่เลือก",
+      "allProducts": "ทุกสินค้า ({{count}})",
+      "specific": "{{count}} สินค้า"
+    }
+  },
+  "doctor": {
+    "title": "แพทย์",
+    "newDoctor": "เพิ่มแพทย์",
+    "editDoctor": "แก้ไขข้อมูลแพทย์",
+    "newDoctorDescription": "เพิ่มแพทย์ในทีม ใช้เลือกเมื่อจองนัดและคำนวณค่าคอมมิชชัน",
+    "deleteTitle": "ลบแพทย์ท่านนี้หรือไม่?",
+    "deleteDescription": "นัดหมายและใบเสร็จที่อ้างอิงถึงแพทย์ท่านนี้จะคงอยู่",
+    "empty": "ยังไม่มีแพทย์",
+    "statusActive": "ปฏิบัติงาน",
+    "statusInactive": "ไม่ปฏิบัติงาน",
+    "activeLabel": "ปฏิบัติงานในทีม",
+    "commissionLabel": "อัตราคอมมิชชัน (%)",
+    "commissionHelp": "อัตราเริ่มต้นเมื่อไม่มีค่าทับซ้อนต่อใบเสร็จ",
+    "email": "อีเมล",
+    "errors": {
+      "tenantRequired": "เลือกคลินิกก่อน",
+      "nameRequired": "ต้องระบุชื่อแพทย์",
+      "commissionInvalid": "ค่าคอมมิชชันต้องอยู่ในช่วง 0–100",
+      "phoneInvalid": "เบอร์โทรต้องมี 8–15 หลัก"
+    },
+    "col": {
+      "name": "ชื่อ",
+      "specialty": "ความเชี่ยวชาญ",
+      "license": "เลขที่ใบอนุญาต",
+      "commission": "คอมมิชชัน",
+      "contact": "ติดต่อ",
+      "status": "สถานะ"
+    }
   }
 }

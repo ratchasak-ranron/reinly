@@ -10,6 +10,9 @@
     "appointments": "Appointments",
     "courses": "Courses",
     "inventory": "Inventory",
+    "products": "Products",
+    "promotions": "Promotions",
+    "doctors": "Doctors",
     "branches": "Branches",
     "reports": "Reports",
     "audit": "Audit Log",
@@ -591,5 +594,116 @@
     "goToPage": "Go to page {{page}}",
     "showing": "Showing {{from}}–{{to}} of {{total}}",
     "perPage": "Per page"
+  },
+  "product": {
+    "title": "Products & bundles",
+    "newProduct": "New product",
+    "editProduct": "Edit product",
+    "newProductDescription": "Master catalog item — services, consumables, memberships, or bundles.",
+    "deleteTitle": "Delete this product?",
+    "deleteDescription": "Removes the product from the catalog. Past receipts that referenced it are unaffected.",
+    "searchPlaceholder": "Search products…",
+    "description": "Description",
+    "bundleCount": "Bundle of {{count}}",
+    "empty": {
+      "list": "No products yet",
+      "filter": "No products match"
+    },
+    "errors": {
+      "tenantRequired": "Pick a clinic first",
+      "required": "SKU and name are required",
+      "priceInvalid": "Price must be 0 or greater"
+    },
+    "col": {
+      "sku": "SKU",
+      "name": "Name",
+      "category": "Category",
+      "price": "Price",
+      "bundle": "Bundle"
+    },
+    "category": {
+      "service": "Service",
+      "consumable": "Consumable",
+      "membership": "Membership",
+      "aesthetic": "Aesthetic",
+      "dental": "Dental"
+    },
+    "bundle": {
+      "title": "Bundle items",
+      "description": "Combine non-bundle products into a single SKU with a custom price.",
+      "addItem": "Add item",
+      "empty": "No items yet — leave empty for a stand-alone product."
+    }
+  },
+  "promotion": {
+    "title": "Promotions",
+    "newPromotion": "New promotion",
+    "editPromotion": "Edit promotion",
+    "newPromotionDescription": "Discount code applied to product or bundle prices.",
+    "deleteTitle": "Delete this promotion?",
+    "deleteDescription": "Removes the promo code from the catalog. Receipts that already used it are kept.",
+    "empty": "No promotions yet",
+    "alwaysOn": "Always on",
+    "statusActive": "Active",
+    "statusInactive": "Inactive",
+    "activeLabel": "Active",
+    "specificHelp": "Pick the products this promo applies to.",
+    "errors": {
+      "tenantRequired": "Pick a clinic first",
+      "required": "Code and name are required",
+      "codeFormat": "Code must be 2–40 characters: A–Z, 0–9, _, -",
+      "valueInvalid": "Discount value is invalid",
+      "specificEmpty": "Pick at least one product"
+    },
+    "col": {
+      "code": "Code",
+      "name": "Name",
+      "type": "Type",
+      "discount": "Discount",
+      "scope": "Scope",
+      "window": "Window",
+      "startsAt": "Starts at",
+      "endsAt": "Ends at",
+      "status": "Status"
+    },
+    "type": {
+      "percent": "Percent",
+      "amount": "Fixed amount"
+    },
+    "scope": {
+      "allProductsLabel": "All products",
+      "specificLabel": "Specific products",
+      "allProducts": "All ({{count}}) products",
+      "specific": "{{count}} products"
+    }
+  },
+  "doctor": {
+    "title": "Doctors",
+    "newDoctor": "New doctor",
+    "editDoctor": "Edit doctor",
+    "newDoctorDescription": "Add a clinician to the roster — picked when booking and used in commission reports.",
+    "deleteTitle": "Delete this doctor?",
+    "deleteDescription": "Past appointments and receipts that reference the doctor are unaffected.",
+    "empty": "No doctors yet",
+    "statusActive": "Active",
+    "statusInactive": "Off-roster",
+    "activeLabel": "Active on the roster",
+    "commissionLabel": "Commission rate (%)",
+    "commissionHelp": "Default rate applied when no per-receipt override exists.",
+    "email": "Email",
+    "errors": {
+      "tenantRequired": "Pick a clinic first",
+      "nameRequired": "Doctor name is required",
+      "commissionInvalid": "Commission must be 0–100",
+      "phoneInvalid": "Phone must be 8–15 digits"
+    },
+    "col": {
+      "name": "Name",
+      "specialty": "Specialty",
+      "license": "License",
+      "commission": "Commission",
+      "contact": "Contact",
+      "status": "Status"
+    }
   }
 }

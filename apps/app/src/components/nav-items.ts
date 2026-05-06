@@ -5,8 +5,11 @@ import {
   GraduationCap,
   Home,
   Package,
+  PackageSearch,
   ScrollText,
   ShieldCheck,
+  Stethoscope,
+  Tag,
   Users,
   type LucideIcon,
 } from 'lucide-react';
@@ -31,6 +34,9 @@ export interface NavItem {
     | '/appointments'
     | '/courses'
     | '/inventory'
+    | '/products'
+    | '/promotions'
+    | '/doctors'
     | '/branches'
     | '/reports'
     | '/audit'
@@ -42,6 +48,9 @@ export interface NavItem {
     | 'nav.appointments'
     | 'nav.courses'
     | 'nav.inventory'
+    | 'nav.products'
+    | 'nav.promotions'
+    | 'nav.doctors'
     | 'nav.branches'
     | 'nav.reports'
     | 'nav.audit'
@@ -84,6 +93,30 @@ export const NAV_ITEMS: ReadonlyArray<NavItem> = [
     exact: false,
     primary: false,
     accent: 'rose',
+  },
+  {
+    to: '/products',
+    icon: PackageSearch,
+    labelKey: 'nav.products',
+    exact: false,
+    primary: false,
+    accent: 'indigo',
+  },
+  {
+    to: '/promotions',
+    icon: Tag,
+    labelKey: 'nav.promotions',
+    exact: false,
+    primary: false,
+    accent: 'amber',
+  },
+  {
+    to: '/doctors',
+    icon: Stethoscope,
+    labelKey: 'nav.doctors',
+    exact: false,
+    primary: false,
+    accent: 'sky',
   },
   {
     to: '/branches',

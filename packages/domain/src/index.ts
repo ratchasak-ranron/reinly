@@ -12,3 +12,6 @@ export * from './inventory';
 export * from './audit';
 export * from './consent';
 export * from './service';
+export * from './product';
+export * from './promotion';
+export * from './doctor';
